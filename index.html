@@ -332,6 +332,8 @@ footer{background:var(--s1);border-top:1px solid var(--border);padding:3rem 2rem
 .ab-opp{background:rgba(200,245,66,.1);color:var(--accent);border:1px solid rgba(200,245,66,.2)}
 .action-body{padding:.85rem 1rem;font-size:.78rem;color:var(--soft);line-height:1.65}
 </style>
+<script src="https://js.stripe.com/v3/"></script>
+<meta name="stripe-pk" content="pk_live_51TPmdV2OeVtjAJocHNtTomXVGgKfzaiiViiVRfhsEpRa9yUWlvHKqlyMpU0AAkRqlCLYoSkf3u0KzwU80q5XG4Fl007VUec3vi">
 </head>
 <body>
 
@@ -436,7 +438,7 @@ footer{background:var(--s1);border-top:1px solid var(--border);padding:3rem 2rem
         <div class="agent-lock-overlay">
           <span class="lock-icon">🔒</span>
           <span class="lock-text">Este agente requiere plan Pro o Scale</span>
-          <span class="lock-plan">Actualizar plan →</span>
+          <span class="lock-plan" style="cursor:pointer" onclick="handlePlanClick('pro')">Actualizar a Pro →</span>
         </div>
       </div>
 
@@ -450,7 +452,7 @@ footer{background:var(--s1);border-top:1px solid var(--border);padding:3rem 2rem
         <div class="agent-lock-overlay">
           <span class="lock-icon">🔒</span>
           <span class="lock-text">Este agente es exclusivo del plan Scale</span>
-          <span class="lock-plan">Actualizar a Scale →</span>
+          <span class="lock-plan" style="cursor:pointer" onclick="handlePlanClick('scale')">Actualizar a Scale →</span>
         </div>
       </div>
 
@@ -512,7 +514,7 @@ footer{background:var(--s1);border-top:1px solid var(--border);padding:3rem 2rem
           <li><span class="feat-check">✓</span> Exportar resultados</li>
           <li><span class="feat-x">✕</span> <span class="feat-disabled">Gestor operacional</span></li>
         </ul>
-        <button class="plan-btn plan-btn-solid" onclick="openModal('register','pro')">Empezar con Pro</button>
+        <button class="plan-btn plan-btn-solid" onclick="handlePlanClick('pro')">Empezar con Pro</button>
       </div>
 
       <div class="pricing-card">
@@ -530,7 +532,7 @@ footer{background:var(--s1);border-top:1px solid var(--border);padding:3rem 2rem
           <li><span class="feat-check">✓</span> Onboarding personalizado</li>
           <li><span class="feat-check">✓</span> Agente de Ads IA (próximamente)</li>
         </ul>
-        <button class="plan-btn plan-btn-ghost" onclick="openModal('register','scale')">Empezar con Scale</button>
+        <button class="plan-btn plan-btn-ghost" onclick="handlePlanClick('scale')">Empezar con Scale</button>
       </div>
 
     </div>
@@ -635,6 +637,7 @@ function loadUser(){try{return JSON.parse(localStorage.getItem('srba_user'))}cat
 
 // ── BOOT ──
 window.onload=()=>{
+  checkStripeReturn();
   currentUser = loadUser();
   if(currentUser) applyUser();
   revealObserver();
@@ -713,6 +716,13 @@ function doRegister(){
     currentUser=user; saveUser(user); applyUser();
     closeModal('authModal');
     showToast(`✅ Bienvenido/a, ${name.split(' ')[0]}! Tu cuenta ${PLANS[selectedPlan].name} está activa.`,true);
+    // Si eligió plan de pago, redirigir a Stripe tras 1.5s
+    if (selectedPlan !== 'free') {
+      setTimeout(() => {
+        showToast('Redirigiendo al pago seguro de Stripe...', true);
+        setTimeout(() => goToStripe(selectedPlan), 1200);
+      }, 800);
+    }
   },1200);
 }
 
@@ -1162,6 +1172,61 @@ async function analyzeDash(){
   }catch{document.getElementById('d-output').innerHTML='<div style="padding:2rem;text-align:center;font-size:.8rem;color:#f87171">Error. Inténtalo de nuevo.</div>';}
   btn.disabled=false;btnText.textContent='⚡ Analizar el día';
 }
+
+
+// ── STRIPE CONFIG ──
+const STRIPE_PRO_LINK = 'https://buy.stripe.com/cNi9AM0bB7Et6J31wz4gg00';
+const STRIPE_SCALE_LINK = 'https://buy.stripe.com/00wfZaf6vcYNc3n3EH4gg01';
+const BASE_URL = 'https://srba-ten.vercel.app';
+
+function handlePlanClick(plan) {
+  if (!currentUser) {
+    // Si no está logado, primero registro y luego pago
+    selectedPlan = plan;
+    openModal('register', plan);
+    return;
+  }
+  // Si ya está logado, ir directo al pago
+  goToStripe(plan);
+}
+
+function goToStripe(plan) {
+  const email = currentUser ? encodeURIComponent(currentUser.email) : '';
+  const name = currentUser ? encodeURIComponent(currentUser.name) : '';
+  
+  let link = plan === 'pro' ? STRIPE_PRO_LINK : STRIPE_SCALE_LINK;
+  
+  // Añadir prefill de email para mejor UX en Stripe Checkout
+  link += '?prefilled_email=' + email;
+  link += '&client_reference_id=' + encodeURIComponent(email);
+  link += '&success_url=' + encodeURIComponent(BASE_URL + '?payment=success&plan=' + plan);
+  link += '&cancel_url=' + encodeURIComponent(BASE_URL + '?payment=cancelled');
+  
+  window.open(link, '_blank');
+}
+
+// Detectar retorno de Stripe
+function checkStripeReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const payment = params.get('payment');
+  const plan = params.get('plan');
+  
+  if (payment === 'success' && plan && currentUser) {
+    // Actualizar plan del usuario
+    currentUser.plan = plan;
+    saveUser(currentUser);
+    applyUser();
+    showToast('🎉 ¡Pago completado! Plan ' + PLANS[plan].name + ' activado.', true);
+    // Limpiar URL
+    window.history.replaceState({}, '', '/');
+  } else if (payment === 'cancelled') {
+    showToast('❌ Pago cancelado. Puedes intentarlo de nuevo cuando quieras.');
+    window.history.replaceState({}, '', '/');
+  }
+}
+
+// Modificar doRegister para redirigir a Stripe si plan de pago
+const _origDoRegister = doRegister;
 
 // ── UTILS ──
 function showToast(msg,success=false){
