@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SRBA · Agentes IA para Ecommerce</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#09090b;--s1:#111114;--s2:#18181c;--s3:#222228;
+  --border:#2a2a32;--border2:#363640;
+  --text:#f4f3f0;--muted:#6b6a72;--soft:#a8a7b0;
+  --accent:#c8f542;--accent2:#9fc835;--accent-glow:rgba(200,245,66,0.15);
+  --r:14px;--r-sm:8px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--text);font-size:16px;line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NOISE OVERLAY ── */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.03;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:62px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2rem;
+  background:rgba(9,9,11,.85);backdrop-filter:blur(20px) saturate(180%);
+  border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.35rem;letter-spacing:-.03em;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:1px}
+.nav-logo-pill{background:var(--accent);color:#1a1a18;padding:1px 6px 2px;border-radius:5px;font-size:1.2rem}
+.nav-links{display:flex;gap:.25rem;list-style:none}
+.nav-links a{font-size:.83rem;color:var(--muted);text-decoration:none;padding:.38rem .8rem;border-radius:100px;transition:color .2s,background .2s}
+.nav-links a:hover{color:var(--text);background:var(--s2)}
+.nav-right{display:flex;align-items:center;gap:.75rem}
+.btn-login{font-size:.83rem;color:var(--soft);background:transparent;border:1px solid var(--border2);border-radius:100px;padding:.42rem 1.1rem;cursor:pointer;font-family:'Instrument Sans',sans-serif;transition:all .2s}
+.btn-login:hover{border-color:var(--soft);color:var(--text)}
+.btn-cta-nav{font-size:.83rem;background:var(--accent);color:#1a1a18;border:none;border-radius:100px;padding:.5rem 1.25rem;cursor:pointer;font-family:'Instrument Sans',sans-serif;font-weight:500;transition:opacity .2s}
+.btn-cta-nav:hover{opacity:.88}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:8rem 2rem 5rem;position:relative;overflow:hidden;text-align:center}
+.hero-glow{position:absolute;top:20%;left:50%;transform:translateX(-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(200,245,66,.12) 0%,transparent 70%);pointer-events:none;z-index:0}
+.hero-grid{position:absolute;inset:0;z-index:0;
+  background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:60px 60px;
+  -webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%)}
+.hero-content{position:relative;z-index:1;max-width:820px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.55rem;background:rgba(200,245,66,.1);border:1px solid rgba(200,245,66,.25);color:var(--accent);font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;padding:.38rem 1rem;border-radius:100px;margin-bottom:2rem;animation:fadeUp .6s ease both}
+.hero-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2.8rem,5.5vw,5rem);line-height:1.0;letter-spacing:-.04em;color:var(--text);margin-bottom:1.5rem;animation:fadeUp .6s .1s ease both}
+h1 .dim{color:var(--muted)}
+h1 .hi{color:var(--accent)}
+.hero-sub{font-size:1.1rem;color:var(--soft);max-width:520px;margin:0 auto 2.75rem;font-weight:300;line-height:1.8;animation:fadeUp .6s .2s ease both}
+.hero-btns{display:flex;align-items:center;justify-content:center;gap:.85rem;flex-wrap:wrap;animation:fadeUp .6s .3s ease both}
+.btn-primary{background:var(--accent);color:#1a1a18;border:none;padding:.9rem 2.25rem;border-radius:100px;font-size:.95rem;font-weight:500;cursor:pointer;font-family:'Instrument Sans',sans-serif;transition:all .2s;display:inline-flex;align-items:center;gap:.5rem;box-shadow:0 0 32px rgba(200,245,66,.25)}
+.btn-primary:hover{opacity:.9;transform:translateY(-2px);box-shadow:0 0 48px rgba(200,245,66,.35)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2);padding:.9rem 2rem;border-radius:100px;font-size:.95rem;font-weight:400;cursor:pointer;font-family:'Instrument Sans',sans-serif;transition:all .2s;display:inline-flex;align-items:center;gap:.5rem}
+.btn-outline:hover{border-color:var(--soft);transform:translateY(-2px)}
+.hero-stats{display:flex;align-items:center;justify-content:center;gap:3rem;margin-top:4rem;padding-top:3rem;border-top:1px solid var(--border);animation:fadeUp .6s .4s ease both}
+.hstat-val{font-family:'Syne',sans-serif;font-size:1.9rem;font-weight:700;color:var(--text)}
+.hstat-label{font-size:.75rem;color:var(--muted);margin-top:.2rem}
+
+/* ── SECTIONS ── */
+section{padding:6rem 2rem;position:relative;z-index:1}
+.section-inner{max-width:1100px;margin:0 auto}
+.stag{font-size:.7rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem;display:block}
+h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.9rem,3.2vw,2.9rem);letter-spacing:-.03em;line-height:1.06;color:var(--text);margin-bottom:1rem}
+.ssub{font-size:.975rem;color:var(--soft);font-weight:300;line-height:1.8;margin-bottom:3.5rem;max-width:500px}
+
+/* ── AGENTS SECTION ── */
+#agentes{background:var(--s1)}
+.agents-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:var(--r);overflow:hidden}
+.agent-tile{background:var(--s1);padding:1.75rem;position:relative;cursor:pointer;transition:background .2s}
+.agent-tile:hover{background:var(--s2)}
+.agent-tile.locked{cursor:default}
+.agent-tile.locked:hover{background:var(--s1)}
+.agent-badge{position:absolute;top:1.25rem;right:1.25rem;font-size:.65rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.22rem .65rem;border-radius:100px}
+.badge-free{background:rgba(200,245,66,.12);color:var(--accent);border:1px solid rgba(200,245,66,.25)}
+.badge-pro{background:rgba(147,197,253,.1);color:#93c5fd;border:1px solid rgba(147,197,253,.2)}
+.badge-scale{background:rgba(249,168,212,.1);color:#f9a8d4;border:1px solid rgba(249,168,212,.2)}
+.badge-locked{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--border)}
+.agent-icon{font-size:1.6rem;margin-bottom:1rem;display:block}
+.agent-tile h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:.45rem;color:var(--text)}
+.agent-tile p{font-size:.825rem;color:var(--muted);line-height:1.6}
+.agent-lock-overlay{position:absolute;inset:0;background:rgba(9,9,11,.65);backdrop-filter:blur(3px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;border-radius:0;opacity:0;transition:opacity .2s}
+.agent-tile.locked:hover .agent-lock-overlay{opacity:1}
+.lock-icon{font-size:1.5rem}
+.lock-text{font-size:.78rem;color:var(--soft);text-align:center;max-width:160px;line-height:1.5}
+.lock-plan{font-size:.72rem;font-weight:600;color:var(--accent);margin-top:.25rem}
+.agent-open-btn{margin-top:1.25rem;background:var(--accent);color:#1a1a18;border:none;border-radius:100px;padding:.42rem 1rem;font-size:.78rem;font-weight:500;cursor:pointer;font-family:'Instrument Sans',sans-serif;transition:opacity .2s;display:none}
+.agent-tile.unlocked .agent-open-btn{display:block}
+.agent-open-btn:hover{opacity:.85}
+
+/* ── PRICING ── */
+#precios{background:var(--bg)}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:var(--r);overflow:hidden}
+.pricing-card{background:var(--s1);padding:2rem}
+.pricing-card.popular{background:var(--s2);position:relative}
+.popular-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--accent);color:#1a1a18;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.28rem .9rem;border-radius:0 0 8px 8px;white-space:nowrap}
+.plan-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;color:var(--text);margin-bottom:.35rem}
+.plan-desc{font-size:.8rem;color:var(--muted);margin-bottom:1.75rem;line-height:1.55}
+.plan-price{display:flex;align-items:baseline;gap:.3rem;margin-bottom:.3rem}
+.plan-cur{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;color:var(--muted)}
+.plan-val{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--text);line-height:1}
+.plan-period{font-size:.8rem;color:var(--muted)}
+.plan-setup{font-size:.75rem;color:var(--muted);margin-bottom:1.75rem}
+.popular .plan-val{color:var(--accent)}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:.5rem;margin-bottom:2rem}
+.plan-features li{font-size:.825rem;color:var(--soft);display:flex;align-items:flex-start;gap:.6rem;line-height:1.45}
+.feat-check{color:var(--accent);flex-shrink:0;font-size:.8rem;margin-top:.1rem}
+.feat-x{color:var(--border2);flex-shrink:0;font-size:.8rem;margin-top:.1rem}
+.feat-disabled{color:var(--muted)}
+.plan-btn{width:100%;padding:.85rem;border-radius:100px;font-family:'Instrument Sans',sans-serif;font-size:.875rem;font-weight:500;cursor:pointer;transition:all .2s;border:none}
+.plan-btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border2)}
+.plan-btn-ghost:hover{border-color:var(--soft);background:var(--s2)}
+.plan-btn-solid{background:var(--accent);color:#1a1a18;box-shadow:0 0 24px rgba(200,245,66,.2)}
+.plan-btn-solid:hover{opacity:.9;box-shadow:0 0 36px rgba(200,245,66,.3)}
+
+/* ── MODAL BASE ── */
+.modal-bg{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-bg.open{opacity:1;pointer-events:all}
+.modal{background:var(--s1);border:1px solid var(--border2);border-radius:20px;width:100%;max-width:440px;overflow:hidden;transform:translateY(20px) scale(.97);transition:transform .25s}
+.modal-bg.open .modal{transform:none}
+.modal-header{padding:1.75rem 1.75rem 0;display:flex;align-items:flex-start;justify-content:space-between}
+.modal-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--text)}
+.modal-logo span{color:var(--accent)}
+.modal-close{background:var(--s2);border:1px solid var(--border);border-radius:8px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:.85rem;transition:all .2s}
+.modal-close:hover{color:var(--text);border-color:var(--border2)}
+.modal-body{padding:1.75rem}
+.modal-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;margin-bottom:.35rem}
+.modal-sub{font-size:.83rem;color:var(--muted);margin-bottom:1.75rem;line-height:1.55}
+.form-field{margin-bottom:1rem}
+.form-field label{display:block;font-size:.72rem;font-weight:500;color:var(--muted);margin-bottom:.35rem;letter-spacing:.04em;text-transform:uppercase}
+.form-field input{width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:9px;padding:.72rem 1rem;font-family:'Instrument Sans',sans-serif;font-size:.9rem;color:var(--text);outline:none;transition:border-color .2s}
+.form-field input:focus{border-color:var(--accent2)}
+.form-field input::placeholder{color:var(--muted)}
+.form-submit{width:100%;background:var(--accent);color:#1a1a18;border:none;padding:.88rem;border-radius:100px;font-family:'Instrument Sans',sans-serif;font-size:.925rem;font-weight:500;cursor:pointer;transition:all .2s;margin-top:.5rem;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.form-submit:hover{opacity:.9}
+.form-submit:disabled{opacity:.45;cursor:not-allowed}
+.form-divider{display:flex;align-items:center;gap:.85rem;margin:1.25rem 0;color:var(--muted);font-size:.75rem}
+.form-divider::before,.form-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.form-switch{text-align:center;font-size:.8rem;color:var(--muted);margin-top:1.1rem}
+.form-switch a{color:var(--accent);cursor:pointer;text-decoration:none}
+.form-switch a:hover{text-decoration:underline}
+.form-note{font-size:.72rem;color:var(--muted);text-align:center;margin-top:.85rem;line-height:1.5}
+.plan-selector{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem}
+.plan-opt{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .2s}
+.plan-opt:hover{border-color:var(--border2)}
+.plan-opt.selected{border-color:var(--accent);background:rgba(200,245,66,.06)}
+.plan-opt-left{display:flex;align-items:center;gap:.65rem}
+.plan-opt-radio{width:16px;height:16px;border-radius:50%;border:2px solid var(--border2);flex-shrink:0;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.plan-opt.selected .plan-opt-radio{border-color:var(--accent);background:var(--accent)}
+.plan-opt.selected .plan-opt-radio::after{content:'';width:6px;height:6px;border-radius:50%;background:#1a1a18}
+.plan-opt-name{font-size:.875rem;font-weight:500;color:var(--text)}
+.plan-opt-desc{font-size:.72rem;color:var(--muted)}
+.plan-opt-price{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;color:var(--accent)}
+
+/* ── AGENT MODAL ── */
+.agent-modal{max-width:960px;height:88vh;display:flex;flex-direction:column}
+.agent-modal-header{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:1rem;flex-shrink:0}
+.agent-modal-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem}
+.agent-modal-plan{font-size:.72rem;color:var(--muted)}
+.agent-modal-close{margin-left:auto;background:var(--s2);border:1px solid var(--border);border-radius:8px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:.85rem;transition:all .2s}
+.agent-modal-close:hover{color:var(--text)}
+.agent-iframe{flex:1;border:none;width:100%;background:var(--s2)}
+
+/* ── USER BAR ── */
+.user-bar{display:none;align-items:center;gap:.65rem}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#1a1a18;font-size:.75rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.user-name{font-size:.82rem;color:var(--soft)}
+.user-plan-badge{font-size:.65rem;font-weight:600;padding:.18rem .55rem;border-radius:100px;letter-spacing:.04em;text-transform:uppercase}
+.plan-badge-free{background:rgba(255,255,255,.07);color:var(--muted);border:1px solid var(--border)}
+.plan-badge-pro{background:rgba(147,197,253,.12);color:#93c5fd;border:1px solid rgba(147,197,253,.2)}
+.plan-badge-scale{background:rgba(249,168,212,.12);color:#f9a8d4;border:1px solid rgba(249,168,212,.2)}
+.btn-logout{font-size:.75rem;color:var(--muted);background:transparent;border:none;cursor:pointer;padding:.3rem .5rem;transition:color .2s}
+.btn-logout:hover{color:var(--text)}
+
+/* ── FOOTER ── */
+footer{background:var(--s1);border-top:1px solid var(--border);padding:3rem 2rem 2rem}
+.footer-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.footer-logo-wrap .nav-logo{font-size:1.2rem;margin-bottom:.85rem;display:inline-flex}
+.footer-desc{font-size:.82rem;color:var(--muted);line-height:1.7;max-width:220px}
+.footer-col-title{font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin-bottom:.9rem}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.footer-links a{font-size:.825rem;color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--text)}
+.footer-bottom{max-width:1100px;margin:0 auto;padding-top:2rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-copy{font-size:.75rem;color:var(--muted)}
+
+/* ── MISC ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.spinner{width:16px;height:16px;border:2px solid rgba(26,26,24,.25);border-top-color:#1a1a18;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:.85rem 1.25rem;font-size:.85rem;color:var(--text);box-shadow:0 8px 32px rgba(0,0,0,.4);transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-color:rgba(200,245,66,.35)}
+
+@media(max-width:900px){
+  .agents-grid,.pricing-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .hero-stats{gap:1.5rem}
+  nav .nav-links{display:none}
+}
+@media(max-width:640px){
+  nav{padding:0 1.25rem}
+  section{padding:4rem 1.25rem}
+  .hero{padding:7rem 1.25rem 4rem}
+  .footer-grid{grid-template-columns:1fr}
+  .hero-stats{flex-wrap:wrap;gap:1.5rem;justify-content:flex-start}
+}
+
+/* ── AGENT EMBEDDED STYLES ── */
+.agent-container{width:100%;height:100%;display:flex;flex-direction:column;background:var(--s2);overflow:hidden}
+
+/* Chat agent */
+.chat-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.chat-messages{flex:1;overflow-y:auto;padding:1.25rem;display:flex;flex-direction:column;gap:.85rem}
+.chat-msg{display:flex;gap:.65rem;animation:fadeUp .2s ease}
+.chat-msg.user{flex-direction:row-reverse}
+.chat-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:600;flex-shrink:0}
+.av-bot{background:var(--accent);color:#1a1a18}
+.av-user{background:var(--s3);color:var(--muted)}
+.chat-bubble{max-width:80%;padding:.7rem .95rem;border-radius:12px;font-size:.85rem;line-height:1.6}
+.bubble-bot{background:var(--s3);border:1px solid var(--border);color:var(--text);border-top-left-radius:3px}
+.bubble-user{background:rgba(200,245,66,.12);border:1px solid rgba(200,245,66,.2);color:var(--text);border-top-right-radius:3px}
+.chat-input-row{padding:1rem;border-top:1px solid var(--border);display:flex;gap:.65rem}
+.chat-input{flex:1;background:var(--s3);border:1px solid var(--border);border-radius:9px;padding:.65rem .9rem;font-family:'Instrument Sans',sans-serif;font-size:.875rem;color:var(--text);outline:none;resize:none;min-height:40px;max-height:100px;transition:border-color .2s}
+.chat-input:focus{border-color:rgba(200,245,66,.4)}
+.chat-send{width:40px;height:40px;background:var(--accent);border:none;border-radius:9px;cursor:pointer;color:#1a1a18;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:opacity .2s;flex-shrink:0}
+.chat-send:hover{opacity:.85}
+.chat-send:disabled{opacity:.4;cursor:not-allowed}
+.chat-quickreplies{display:flex;gap:.4rem;flex-wrap:wrap;padding:.5rem 1rem 0}
+.chat-qr{background:var(--s3);border:1px solid var(--border);border-radius:100px;padding:.32rem .75rem;font-size:.75rem;color:var(--muted);cursor:pointer;transition:all .2s}
+.chat-qr:hover{border-color:rgba(200,245,66,.3);color:var(--accent)}
+.typing-dots{display:flex;gap:4px;align-items:center;padding:.7rem .95rem}
+.typing-dots span{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:blink 1.2s infinite}
+.typing-dots span:nth-child(2){animation-delay:.2s}
+.typing-dots span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+
+/* Fichas agent */
+.fichas-wrap{display:grid;grid-template-columns:1fr 1fr;height:100%;overflow:hidden}
+.fichas-form{padding:1.25rem;border-right:1px solid var(--border);overflow-y:auto}
+.fichas-output{padding:1.25rem;overflow-y:auto;background:var(--bg)}
+.agent-field{margin-bottom:.85rem}
+.agent-field label{display:block;font-size:.68rem;font-weight:500;color:var(--muted);margin-bottom:.28rem;letter-spacing:.05em;text-transform:uppercase}
+.agent-field input,.agent-field select,.agent-field textarea{width:100%;background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:.55rem .75rem;font-family:'Instrument Sans',sans-serif;font-size:.825rem;color:var(--text);outline:none;transition:border-color .2s}
+.agent-field input:focus,.agent-field select:focus,.agent-field textarea:focus{border-color:rgba(200,245,66,.4)}
+.agent-field textarea{min-height:60px;resize:vertical}
+.agent-btn{width:100%;background:var(--accent);color:#1a1a18;border:none;padding:.75rem;border-radius:100px;font-family:'Instrument Sans',sans-serif;font-size:.85rem;font-weight:500;cursor:pointer;transition:opacity .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:.5rem}
+.agent-btn:hover{opacity:.88}
+.agent-btn:disabled{opacity:.4;cursor:not-allowed}
+.result-block{background:var(--s1);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:.75rem}
+.result-block-head{display:flex;align-items:center;justify-content:space-between;padding:.6rem .9rem;background:var(--s2);border-bottom:1px solid var(--border)}
+.result-block-label{font-size:.68rem;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.copy-mini{background:transparent;border:1px solid var(--border);border-radius:5px;padding:.18rem .55rem;font-size:.68rem;cursor:pointer;color:var(--muted);font-family:'Instrument Sans',sans-serif;transition:all .2s}
+.copy-mini:hover{border-color:var(--text);color:var(--text)}
+.copy-mini.ok{background:var(--accent);color:#1a1a18;border-color:var(--accent)}
+.result-block-body{padding:.85rem .9rem;font-size:.8rem;color:var(--soft);line-height:1.65;white-space:pre-wrap}
+.output-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--muted);text-align:center;gap:.75rem}
+.output-empty-icon{font-size:2rem;opacity:.2}
+
+/* Carritos agent */
+.carritos-wrap{display:grid;grid-template-columns:280px 1fr;height:100%;overflow:hidden}
+.carritos-sidebar{padding:1.25rem;border-right:1px solid var(--border);overflow-y:auto}
+.carritos-output{padding:1.25rem;overflow-y:auto}
+.email-seq-card{background:var(--s3);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:.85rem}
+.email-seq-head{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;border-bottom:1px solid var(--border);background:var(--s2)}
+.email-seq-meta{display:flex;align-items:center;gap:.6rem}
+.email-seq-num{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#1a1a18;font-size:.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.email-seq-title{font-size:.8rem;font-weight:500;color:var(--text)}
+.email-seq-body{padding:.9rem 1rem;font-size:.78rem;color:var(--soft);line-height:1.65;white-space:pre-wrap}
+.email-field-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:.3rem;font-weight:500}
+.email-field-val{background:var(--s2);border-radius:6px;padding:.45rem .65rem;font-size:.78rem;color:var(--text);margin-bottom:.65rem}
+.email-asunto{color:var(--accent);font-weight:500}
+
+/* Investigador agent */
+.invest-wrap{padding:1.25rem;overflow-y:auto;height:100%}
+.invest-search{display:flex;gap:.65rem;margin-bottom:1.25rem}
+.invest-input{flex:1;background:var(--s3);border:1px solid var(--border);border-radius:100px;padding:.65rem 1.1rem;font-family:'Instrument Sans',sans-serif;font-size:.875rem;color:var(--text);outline:none;transition:border-color .2s}
+.invest-input:focus{border-color:rgba(200,245,66,.4)}
+.invest-input::placeholder{color:var(--muted)}
+.invest-search-btn{background:var(--accent);color:#1a1a18;border:none;border-radius:100px;padding:.65rem 1.35rem;font-size:.825rem;font-weight:500;cursor:pointer;font-family:'Instrument Sans',sans-serif;white-space:nowrap;transition:opacity .2s;display:flex;align-items:center;gap:.4rem}
+.invest-search-btn:hover{opacity:.88}
+.invest-search-btn:disabled{opacity:.4;cursor:not-allowed}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.85rem}
+.product-mini{background:var(--s3);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s}
+.product-mini:hover{border-color:var(--border2)}
+.product-mini-thumb{height:100px;display:flex;align-items:center;justify-content:center;font-size:2rem;position:relative}
+.product-mini-score{position:absolute;top:.5rem;right:.5rem;background:var(--bg);color:var(--accent);font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;padding:.18rem .5rem;border-radius:100px}
+.product-mini-body{padding:.85rem}
+.product-mini-name{font-size:.82rem;font-weight:500;color:var(--text);margin-bottom:.25rem}
+.product-mini-price{font-size:.72rem;color:var(--muted)}
+.product-mini-bar{display:flex;align-items:center;gap:.4rem;margin-top:.6rem}
+.mini-bar-label{font-size:.65rem;color:var(--muted);width:50px;flex-shrink:0}
+.mini-bar-track{flex:1;height:4px;background:var(--border);border-radius:2px}
+.mini-bar-fill{height:4px;border-radius:2px;background:var(--accent)}
+.mini-bar-val{font-size:.65rem;color:var(--muted);width:28px;text-align:right}
+
+/* Dashboard agent */
+.dash-wrap{display:grid;grid-template-columns:1fr 1fr;height:100%;overflow:hidden}
+.dash-left{padding:1.25rem;border-right:1px solid var(--border);overflow-y:auto}
+.dash-right{padding:1.25rem;overflow-y:auto;background:var(--bg)}
+.metrics-2col{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:10px;overflow:hidden;margin-bottom:1rem}
+.metric-box{background:var(--s3);padding:.85rem 1rem}
+.metric-box label{display:block;font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.25rem}
+.metric-box input{width:100%;background:transparent;border:none;font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:700;color:var(--text);outline:none}
+.metric-box input::placeholder{color:var(--border2);font-size:1rem}
+.semaphore-block{border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;gap:.85rem;margin-bottom:1rem;border:1px solid}
+.sem-verde{background:rgba(74,222,128,.07);border-color:rgba(74,222,128,.2)}
+.sem-amarillo{background:rgba(251,191,36,.07);border-color:rgba(251,191,36,.2)}
+.sem-rojo{background:rgba(248,113,113,.07);border-color:rgba(248,113,113,.2)}
+.sem-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.sem-verde .sem-circle{background:rgba(74,222,128,.15)}
+.sem-amarillo .sem-circle{background:rgba(251,191,36,.15)}
+.sem-rojo .sem-circle{background:rgba(248,113,113,.15)}
+.sem-status{font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem}
+.sem-verde .sem-status{color:#4ade80}
+.sem-amarillo .sem-status{color:#fbbf24}
+.sem-rojo .sem-status{color:#f87171}
+.sem-text{font-size:.75rem;color:var(--muted);margin-top:.1rem}
+.action-block{background:var(--s3);border:1px solid var(--border);border-radius:10px;margin-bottom:.75rem}
+.action-block-head{display:flex;align-items:center;gap:.6rem;padding:.75rem 1rem;border-bottom:1px solid var(--border)}
+.action-num{width:22px;height:22px;border-radius:50%;background:var(--accent);color:#1a1a18;font-size:.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.action-title{font-size:.82rem;font-weight:500;color:var(--text);flex:1}
+.action-badge{font-size:.62rem;font-weight:600;padding:.16rem .5rem;border-radius:100px}
+.ab-now{background:rgba(248,113,113,.12);color:#f87171;border:1px solid rgba(248,113,113,.2)}
+.ab-opp{background:rgba(200,245,66,.1);color:var(--accent);border:1px solid rgba(200,245,66,.2)}
+.action-body{padding:.85rem 1rem;font-size:.78rem;color:var(--soft);line-height:1.65}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">SR<span class="nav-logo-pill">BA</span></a>
+  <ul class="nav-links">
+    <li><a href="#agentes">Agentes</a></li>
+    <li><a href="#precios">Precios</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="user-bar" id="userBar">
+      <div class="user-avatar" id="userAvatar">?</div>
+      <span class="user-name" id="userName"></span>
+      <span class="user-plan-badge" id="userPlanBadge"></span>
+      <button class="btn-logout" onclick="logout()">Salir</button>
+    </div>
+    <button class="btn-login" id="btnLogin" onclick="openModal('login')">Iniciar sesión</button>
+    <button class="btn-cta-nav" id="btnRegister" onclick="openModal('register')">Empezar gratis →</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow"><div class="hero-eyebrow-dot"></div>IA · Ecommerce · Shopify</div>
+    <h1>Automatiza tu tienda<br>con <span class="hi">agentes IA</span><br><span class="dim">que trabajan solos</span></h1>
+    <p class="hero-sub">5 agentes de inteligencia artificial listos para usar — atención al cliente, fichas de producto, recuperación de carritos y más. Sin código. Sin instalaciones.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="openModal('register')">Empezar gratis →</button>
+      <a href="#agentes" class="btn-outline">Ver los agentes</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="hstat-val">5</div><div class="hstat-label">Agentes IA listos</div></div>
+      <div><div class="hstat-val">-70%</div><div class="hstat-label">Tiempo operativo</div></div>
+      <div><div class="hstat-val">24/7</div><div class="hstat-label">Funcionamiento</div></div>
+      <div><div class="hstat-val">0</div><div class="hstat-label">Código necesario</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENTES -->
+<section id="agentes">
+  <div class="section-inner">
+    <span class="stag">Catálogo de agentes</span>
+    <h2>Elige tu agente.<br>Empieza en minutos.</h2>
+    <p class="ssub">Cada agente tiene IA integrada. Solo configuras tus datos y funciona. El plan que tengas determina a cuáles accedes.</p>
+    <div class="agents-grid reveal" id="agentsGrid">
+
+      <!-- AGENTE 1 — FREE -->
+      <div class="agent-tile" id="tile-1" onclick="handleAgentClick(1)">
+        <span class="agent-badge badge-free">Gratis</span>
+        <span class="agent-icon">🤖</span>
+        <h3>Atención al cliente 24/7</h3>
+        <p>Responde dudas, pedidos y devoluciones automáticamente. Configura el tono y políticas de tu tienda.</p>
+        <button class="agent-open-btn" onclick="event.stopPropagation();openAgent(1)">Abrir agente →</button>
+        <div class="agent-lock-overlay">
+          <span class="lock-icon">🔒</span>
+          <span class="lock-text">Inicia sesión para usar este agente</span>
+          <span class="lock-plan">Disponible en plan Gratis</span>
+        </div>
+      </div>
+
+      <!-- AGENTE 2 — FREE -->
+      <div class="agent-tile" id="tile-2" onclick="handleAgentClick(2)">
+        <span class="agent-badge badge-free">Gratis</span>
+        <span class="agent-icon">✍️</span>
+        <h3>Generador de fichas</h3>
+        <p>Título SEO, descripción larga, bullets, meta description y tags de Shopify listos para copiar y pegar.</p>
+        <button class="agent-open-btn" onclick="event.stopPropagation();openAgent(2)">Abrir agente →</button>
+        <div class="agent-lock-overlay">
+          <span class="lock-icon">🔒</span>
+          <span class="lock-text">Inicia sesión para usar este agente</span>
+          <span class="lock-plan">Disponible en plan Gratis</span>
+        </div>
+      </div>
+
+      <!-- AGENTE 3 — PRO -->
+      <div class="agent-tile locked" id="tile-3" onclick="handleAgentClick(3)">
+        <span class="agent-badge badge-pro">Pro</span>
+        <span class="agent-icon">📧</span>
+        <h3>Recuperador de carritos</h3>
+        <p>Secuencia de 3 emails o mensajes WhatsApp para recuperar ventas perdidas. Con asunto, cuerpo y CTA.</p>
+        <button class="agent-open-btn" onclick="event.stopPropagation();openAgent(3)">Abrir agente →</button>
+        <div class="agent-lock-overlay">
+          <span class="lock-icon">🔒</span>
+          <span class="lock-text">Este agente requiere plan Pro o Scale</span>
+          <span class="lock-plan">Actualizar plan →</span>
+        </div>
+      </div>
+
+      <!-- AGENTE 4 — PRO -->
+      <div class="agent-tile locked" id="tile-4" onclick="handleAgentClick(4)">
+        <span class="agent-badge badge-pro">Pro</span>
+        <span class="agent-icon">🔍</span>
+        <h3>Investigador de productos</h3>
+        <p>Analiza un nicho y devuelve los productos con mayor potencial: score, margen, competencia y keywords.</p>
+        <button class="agent-open-btn" onclick="event.stopPropagation();openAgent(4)">Abrir agente →</button>
+        <div class="agent-lock-overlay">
+          <span class="lock-icon">🔒</span>
+          <span class="lock-text">Este agente requiere plan Pro o Scale</span>
+          <span class="lock-plan">Actualizar plan →</span>
+        </div>
+      </div>
+
+      <!-- AGENTE 5 — SCALE -->
+      <div class="agent-tile locked" id="tile-5" onclick="handleAgentClick(5)">
+        <span class="agent-badge badge-scale">Scale</span>
+        <span class="agent-icon">📊</span>
+        <h3>Gestor operacional</h3>
+        <p>Introduce tus métricas del día y la IA te dice exactamente qué hacer en los próximos 30 minutos.</p>
+        <button class="agent-open-btn" onclick="event.stopPropagation();openAgent(5)">Abrir agente →</button>
+        <div class="agent-lock-overlay">
+          <span class="lock-icon">🔒</span>
+          <span class="lock-text">Este agente es exclusivo del plan Scale</span>
+          <span class="lock-plan">Actualizar a Scale →</span>
+        </div>
+      </div>
+
+      <!-- COMING SOON -->
+      <div class="agent-tile locked">
+        <span class="agent-badge badge-locked">Próximamente</span>
+        <span class="agent-icon">🚀</span>
+        <h3>Agente de Ads con IA</h3>
+        <p>Genera copies para Meta Ads y TikTok Ads optimizados para tu producto y audiencia objetivo.</p>
+        <div class="agent-lock-overlay" style="opacity:1;border-radius:0">
+          <span class="lock-icon">⏳</span>
+          <span class="lock-text">En desarrollo. Disponible próximamente para Scale</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PRECIOS -->
+<section id="precios">
+  <div class="section-inner">
+    <span class="stag">Planes</span>
+    <h2>Empieza gratis.<br>Escala cuando quieras.</h2>
+    <p class="ssub">Sin contratos. Sin permanencia. Cambia o cancela cuando quieras.</p>
+    <div class="pricing-grid reveal">
+
+      <div class="pricing-card">
+        <div class="plan-name">Gratis</div>
+        <div class="plan-desc">Para probar los agentes y ver si encajan con tu operación</div>
+        <div class="plan-price"><span class="plan-cur">€</span><span class="plan-val">0</span></div>
+        <div class="plan-period">para siempre</div>
+        <div class="plan-setup">&nbsp;</div>
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span> Agente de atención al cliente</li>
+          <li><span class="feat-check">✓</span> Generador de fichas de producto</li>
+          <li><span class="feat-check">✓</span> 30 consultas IA al mes</li>
+          <li><span class="feat-check">✓</span> Configuración de tienda básica</li>
+          <li><span class="feat-x">✕</span> <span class="feat-disabled">Recuperador de carritos</span></li>
+          <li><span class="feat-x">✕</span> <span class="feat-disabled">Investigador de productos</span></li>
+          <li><span class="feat-x">✕</span> <span class="feat-disabled">Gestor operacional</span></li>
+        </ul>
+        <button class="plan-btn plan-btn-ghost" onclick="openModal('register')">Empezar gratis</button>
+      </div>
+
+      <div class="pricing-card popular">
+        <div class="popular-badge">⚡ Más elegido</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-desc">Para tiendas en marcha que quieren automatizar la operación</div>
+        <div class="plan-price"><span class="plan-cur">€</span><span class="plan-val">29</span></div>
+        <div class="plan-period">/mes</div>
+        <div class="plan-setup" style="color:var(--muted)">sin permanencia · cancela cuando quieras</div>
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span> Todo lo del plan Gratis</li>
+          <li><span class="feat-check">✓</span> Recuperador de carritos abandonados</li>
+          <li><span class="feat-check">✓</span> Investigador de productos ganadores</li>
+          <li><span class="feat-check">✓</span> 500 consultas IA al mes</li>
+          <li><span class="feat-check">✓</span> Soporte por email</li>
+          <li><span class="feat-check">✓</span> Exportar resultados</li>
+          <li><span class="feat-x">✕</span> <span class="feat-disabled">Gestor operacional</span></li>
+        </ul>
+        <button class="plan-btn plan-btn-solid" onclick="openModal('register','pro')">Empezar con Pro</button>
+      </div>
+
+      <div class="pricing-card">
+        <div class="plan-name">Scale</div>
+        <div class="plan-desc">Para tiendas que ya facturan y quieren control total con IA</div>
+        <div class="plan-price"><span class="plan-cur">€</span><span class="plan-val">79</span></div>
+        <div class="plan-period">/mes</div>
+        <div class="plan-setup">sin permanencia · cancela cuando quieras</div>
+        <ul class="plan-features">
+          <li><span class="feat-check">✓</span> Todo lo del plan Pro</li>
+          <li><span class="feat-check">✓</span> Gestor operacional con dashboard</li>
+          <li><span class="feat-check">✓</span> Consultas IA ilimitadas</li>
+          <li><span class="feat-check">✓</span> Acceso anticipado a nuevos agentes</li>
+          <li><span class="feat-check">✓</span> Soporte prioritario (24h)</li>
+          <li><span class="feat-check">✓</span> Onboarding personalizado</li>
+          <li><span class="feat-check">✓</span> Agente de Ads IA (próximamente)</li>
+        </ul>
+        <button class="plan-btn plan-btn-ghost" onclick="openModal('register','scale')">Empezar con Scale</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto" style="background:var(--s1)">
+  <div class="section-inner" style="max-width:600px;text-align:center">
+    <span class="stag">Contacto</span>
+    <h2>¿Tienes dudas?<br>Escríbenos.</h2>
+    <p class="ssub" style="margin:0 auto 2rem">Respondemos en menos de 24 horas. Si tienes una tienda y quieres ver una demo, cuéntanos.</p>
+    <div style="display:flex;flex-direction:column;gap:.85rem;max-width:420px;margin:0 auto">
+      <input placeholder="Tu nombre" style="background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:.8rem 1.1rem;font-family:'Instrument Sans',sans-serif;font-size:.9rem;color:var(--text);outline:none;width:100%">
+      <input placeholder="tu@email.com" style="background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:.8rem 1.1rem;font-family:'Instrument Sans',sans-serif;font-size:.9rem;color:var(--text);outline:none;width:100%">
+      <textarea placeholder="Cuéntanos sobre tu tienda..." style="background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:.8rem 1.1rem;font-family:'Instrument Sans',sans-serif;font-size:.9rem;color:var(--text);outline:none;width:100%;min-height:100px;resize:vertical"></textarea>
+      <button class="btn-primary" style="justify-content:center" onclick="showToast('✅ Mensaje enviado. Te respondemos en menos de 24h.')">Enviar mensaje →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-logo-wrap">
+      <a href="#" class="nav-logo">SR<span class="nav-logo-pill">BA</span></a>
+      <p class="footer-desc">Agentes de inteligencia artificial para tiendas de ecommerce. Sin código, sin complicaciones.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Agentes</div>
+      <ul class="footer-links">
+        <li><a href="#agentes">Atención al cliente</a></li>
+        <li><a href="#agentes">Fichas de producto</a></li>
+        <li><a href="#agentes">Recuperar carritos</a></li>
+        <li><a href="#agentes">Investigador</a></li>
+        <li><a href="#agentes">Dashboard</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Planes</div>
+      <ul class="footer-links">
+        <li><a href="#precios">Gratis</a></li>
+        <li><a href="#precios">Pro — 29€/mes</a></li>
+        <li><a href="#precios">Scale — 79€/mes</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contacto</div>
+      <ul class="footer-links">
+        <li><a href="mailto:hola@srba.ai">hola@srba.ai</a></li>
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="#">LinkedIn</a></li>
+        <li><a href="#">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 SRBA · Todos los derechos reservados.</span>
+    <span class="footer-copy">Hecho con IA en España 🇪🇸</span>
+  </div>
+</footer>
+
+<!-- MODAL: AUTH -->
+<div class="modal-bg" id="authModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-logo">SR<span>BA</span></div>
+      <button class="modal-close" onclick="closeModal('authModal')">✕</button>
+    </div>
+    <div class="modal-body" id="authModalBody"></div>
+  </div>
+</div>
+
+<!-- MODAL: AGENT -->
+<div class="modal-bg" id="agentModal">
+  <div class="modal agent-modal">
+    <div class="agent-modal-header">
+      <div>
+        <div class="agent-modal-title" id="agentModalTitle">Agente</div>
+        <div class="agent-modal-plan" id="agentModalPlan"></div>
+      </div>
+      <button class="agent-modal-close" onclick="closeModal('agentModal')">✕</button>
+    </div>
+    <div id="agentModalContent" style="flex:1;overflow:hidden;display:flex;flex-direction:column"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ──
+const PLANS = {free:{name:'Gratis',agents:[1,2],badge:'plan-badge-free',label:'Gratis'},pro:{name:'Pro',agents:[1,2,3,4],badge:'plan-badge-pro',label:'Pro'},scale:{name:'Scale',agents:[1,2,3,4,5],badge:'plan-badge-scale',label:'Scale'}};
+let currentUser = null;
+let selectedPlan = 'pro';
+let chatHistory = [];
+let agentTyping = false;
+
+// ── PERSIST ──
+function saveUser(u){localStorage.setItem('srba_user',JSON.stringify(u))}
+function loadUser(){try{return JSON.parse(localStorage.getItem('srba_user'))}catch{return null}}
+
+// ── BOOT ──
+window.onload=()=>{
+  currentUser = loadUser();
+  if(currentUser) applyUser();
+  revealObserver();
+  document.getElementById('navbar').addEventListener('scroll',()=>{});
+  window.addEventListener('scroll',()=>{
+    document.getElementById('navbar').style.borderBottomColor = window.scrollY>20?'var(--border2)':'var(--border)';
+  });
+};
+
+// ── MODALS ──
+function openModal(type, plan='pro'){
+  if(type==='register'){selectedPlan=plan; renderRegister();}
+  else renderLogin();
+  document.getElementById('authModal').classList.add('open');
+}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.getElementById('authModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal('authModal');});
+document.getElementById('agentModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal('agentModal');});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal('authModal');closeModal('agentModal');}});
+
+function renderRegister(plan){
+  if(plan)selectedPlan=plan;
+  document.getElementById('authModalBody').innerHTML=`
+    <div class="modal-title">Crear cuenta</div>
+    <div class="modal-sub">Empieza gratis y accede a los agentes IA de SRBA</div>
+    <div class="plan-selector">
+      ${Object.entries(PLANS).map(([k,v])=>`
+        <div class="plan-opt ${selectedPlan===k?'selected':''}" onclick="selectPlan('${k}')">
+          <div class="plan-opt-left">
+            <div class="plan-opt-radio"></div>
+            <div>
+              <div class="plan-opt-name">${v.name}</div>
+              <div class="plan-opt-desc">${k==='free'?'2 agentes incluidos':k==='pro'?'4 agentes — 29€/mes':'5 agentes — 79€/mes'}</div>
+            </div>
+          </div>
+          <div class="plan-opt-price">${k==='free'?'€0':k==='pro'?'€29':'€79'}</div>
+        </div>`).join('')}
+    </div>
+    <div class="form-field"><label>Nombre</label><input id="reg-name" placeholder="Tu nombre" type="text"></div>
+    <div class="form-field"><label>Email</label><input id="reg-email" placeholder="tu@email.com" type="email"></div>
+    <div class="form-field"><label>Contraseña</label><input id="reg-pass" placeholder="Mínimo 6 caracteres" type="password"></div>
+    <button class="form-submit" id="reg-btn" onclick="doRegister()"><span id="reg-btn-text">Crear cuenta →</span></button>
+    <div class="form-note">🔒 Tus datos están seguros. Sin spam.</div>
+    <div class="form-switch">¿Ya tienes cuenta? <a onclick="renderLogin()">Inicia sesión</a></div>`;
+}
+
+function renderLogin(){
+  document.getElementById('authModalBody').innerHTML=`
+    <div class="modal-title">Bienvenido de nuevo</div>
+    <div class="modal-sub">Accede a tu cuenta para usar los agentes</div>
+    <div class="form-field"><label>Email</label><input id="login-email" placeholder="tu@email.com" type="email"></div>
+    <div class="form-field"><label>Contraseña</label><input id="login-pass" placeholder="Tu contraseña" type="password"></div>
+    <button class="form-submit" id="login-btn" onclick="doLogin()"><span id="login-btn-text">Iniciar sesión →</span></button>
+    <div class="form-switch">¿No tienes cuenta? <a onclick="renderRegister()">Regístrate gratis</a></div>`;
+  document.getElementById('authModal').classList.add('open');
+}
+
+function selectPlan(p){
+  selectedPlan=p;
+  document.querySelectorAll('.plan-opt').forEach(el=>el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+}
+
+function doRegister(){
+  const name=document.getElementById('reg-name').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const pass=document.getElementById('reg-pass').value;
+  if(!name||!email||!pass){showToast('⚠ Completa todos los campos');return;}
+  if(!email.includes('@')){showToast('⚠ Email no válido');return;}
+  if(pass.length<6){showToast('⚠ La contraseña debe tener mínimo 6 caracteres');return;}
+  const btn=document.getElementById('reg-btn');
+  btn.disabled=true;
+  document.getElementById('reg-btn-text').innerHTML='<div class="spinner"></div> Creando cuenta...';
+  setTimeout(()=>{
+    const user={name,email,plan:selectedPlan,createdAt:new Date().toISOString()};
+    currentUser=user; saveUser(user); applyUser();
+    closeModal('authModal');
+    showToast(`✅ Bienvenido/a, ${name.split(' ')[0]}! Tu cuenta ${PLANS[selectedPlan].name} está activa.`,true);
+  },1200);
+}
+
+function doLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  if(!email||!pass){showToast('⚠ Completa todos los campos');return;}
+  const saved=loadUser();
+  const btn=document.getElementById('login-btn');
+  btn.disabled=true;
+  document.getElementById('login-btn-text').innerHTML='<div class="spinner"></div> Entrando...';
+  setTimeout(()=>{
+    if(saved&&saved.email===email){
+      currentUser=saved; applyUser();
+      closeModal('authModal');
+      showToast(`✅ Bienvenido/a de nuevo, ${saved.name.split(' ')[0]}!`,true);
+    } else {
+      btn.disabled=false;
+      document.getElementById('login-btn-text').textContent='Iniciar sesión →';
+      showToast('⚠ Email o contraseña incorrectos. ¿Tienes cuenta?');
+    }
+  },1000);
+}
+
+function applyUser(){
+  const plan=PLANS[currentUser.plan]||PLANS.free;
+  document.getElementById('userBar').style.display='flex';
+  document.getElementById('btnLogin').style.display='none';
+  document.getElementById('btnRegister').style.display='none';
+  document.getElementById('userAvatar').textContent=currentUser.name[0].toUpperCase();
+  document.getElementById('userName').textContent=currentUser.name.split(' ')[0];
+  document.getElementById('userPlanBadge').textContent=plan.label;
+  document.getElementById('userPlanBadge').className='user-plan-badge '+plan.badge;
+  updateTiles();
+}
+
+function updateTiles(){
+  const plan=PLANS[currentUser?.plan||''];
+  const allowed=plan?plan.agents:[];
+  [1,2,3,4,5].forEach(i=>{
+    const tile=document.getElementById('tile-'+i);
+    if(!tile)return;
+    if(allowed.includes(i)){
+      tile.classList.remove('locked');
+      tile.classList.add('unlocked');
+    } else {
+      tile.classList.add('locked');
+      tile.classList.remove('unlocked');
+    }
+  });
+}
+
+function logout(){
+  currentUser=null; localStorage.removeItem('srba_user');
+  document.getElementById('userBar').style.display='none';
+  document.getElementById('btnLogin').style.display='';
+  document.getElementById('btnRegister').style.display='';
+  updateTiles();
+  showToast('👋 Sesión cerrada');
+}
+
+function handleAgentClick(id){
+  if(!currentUser){openModal('login');return;}
+  const plan=PLANS[currentUser.plan]||PLANS.free;
+  if(!plan.agents.includes(id)){
+    const required=id<=2?'Gratis':id<=4?'Pro':'Scale';
+    showToast(`🔒 Este agente requiere plan ${required}. Actualiza tu plan.`);
+    return;
+  }
+  openAgent(id);
+}
+
+// ── AGENT LAUNCHERS ──
+const AGENT_META={
+  1:{title:'Agente · Atención al Cliente 24/7',plan:'Disponible en todos los planes'},
+  2:{title:'Agente · Generador de Fichas de Producto',plan:'Disponible en todos los planes'},
+  3:{title:'Agente · Recuperador de Carritos Abandonados',plan:'Requiere plan Pro o Scale'},
+  4:{title:'Agente · Investigador de Productos Ganadores',plan:'Requiere plan Pro o Scale'},
+  5:{title:'Agente · Gestor Operacional',plan:'Exclusivo plan Scale'},
+};
+
+function openAgent(id){
+  const meta=AGENT_META[id];
+  document.getElementById('agentModalTitle').textContent=meta.title;
+  document.getElementById('agentModalPlan').textContent=meta.plan;
+  const content=document.getElementById('agentModalContent');
+  content.innerHTML='';
+  if(id===1) content.appendChild(buildAgent1());
+  else if(id===2) content.appendChild(buildAgent2());
+  else if(id===3) content.appendChild(buildAgent3());
+  else if(id===4) content.appendChild(buildAgent4());
+  else if(id===5) content.appendChild(buildAgent5());
+  document.getElementById('agentModal').classList.add('open');
+}
+
+// ── AGENT 1: CHAT ──
+let storeConfig={name:'Mi Tienda',delivery:'12-20 días',returns:'30 días',payments:'Tarjeta, PayPal',tone:'cálido y profesional'};
+chatHistory=[];
+
+function buildAgent1(){
+  const wrap=document.createElement('div');
+  wrap.style.cssText='display:flex;flex-direction:column;height:100%;overflow:hidden';
+  wrap.innerHTML=`
+  <details style="padding:.75rem 1rem;border-bottom:1px solid var(--border);background:var(--s2);flex-shrink:0">
+    <summary style="font-size:.78rem;color:var(--muted);cursor:pointer;user-select:none">⚙ Configurar tienda</summary>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-top:.85rem">
+      <div class="agent-field"><label>Nombre tienda</label><input id="a1-name" value="${storeConfig.name}" placeholder="Mi Tienda"></div>
+      <div class="agent-field"><label>Días entrega</label><input id="a1-delivery" value="${storeConfig.delivery}" placeholder="12-20 días"></div>
+      <div class="agent-field"><label>Devoluciones</label><input id="a1-returns" value="${storeConfig.returns}" placeholder="30 días"></div>
+      <div class="agent-field"><label>Métodos pago</label><input id="a1-payments" value="${storeConfig.payments}" placeholder="Tarjeta, PayPal"></div>
+    </div>
+    <button class="agent-btn" style="margin-top:.65rem;width:auto;padding:.45rem 1.1rem;font-size:.78rem" onclick="saveA1Config()">Guardar</button>
+  </details>
+  <div class="chat-messages" id="a1-messages"></div>
+  <div class="chat-quickreplies" id="a1-qr">
+    <div class="chat-qr" onclick="a1Send('¿Dónde está mi pedido?')">📦 Mi pedido</div>
+    <div class="chat-qr" onclick="a1Send('Quiero devolver un producto')">↩ Devolución</div>
+    <div class="chat-qr" onclick="a1Send('¿Cuánto tarda el envío?')">🚚 Envío</div>
+    <div class="chat-qr" onclick="a1Send('Tengo un producto defectuoso')">⚠ Defectuoso</div>
+  </div>
+  <div class="chat-input-row" style="flex-shrink:0">
+    <textarea class="chat-input" id="a1-input" placeholder="Escribe el mensaje del cliente..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();a1Send()}" rows="1"></textarea>
+    <button class="chat-send" id="a1-send" onclick="a1Send()">➤</button>
+  </div>`;
+  setTimeout(()=>{
+    a1AddBot(`¡Hola! Soy el asistente de ${storeConfig.name}. ¿En qué puedo ayudarte?`);
+  },100);
+  return wrap;
+}
+
+function saveA1Config(){
+  storeConfig={name:document.getElementById('a1-name')?.value||storeConfig.name,delivery:document.getElementById('a1-delivery')?.value||storeConfig.delivery,returns:document.getElementById('a1-returns')?.value||storeConfig.returns,payments:document.getElementById('a1-payments')?.value||storeConfig.payments};
+  chatHistory=[];
+  const msgs=document.getElementById('a1-messages');
+  if(msgs)msgs.innerHTML='';
+  a1AddBot(`✅ Configurado. Soy el agente de ${storeConfig.name}.`);
+}
+
+function a1AddBot(text){
+  const msgs=document.getElementById('a1-messages');
+  if(!msgs)return;
+  const d=document.createElement('div');
+  d.className='chat-msg';
+  d.innerHTML=`<div class="chat-avatar av-bot">AI</div><div class="chat-bubble bubble-bot">${text}</div>`;
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+
+function a1AddUser(text){
+  const msgs=document.getElementById('a1-messages');
+  if(!msgs)return;
+  const d=document.createElement('div');
+  d.className='chat-msg user';
+  d.innerHTML=`<div class="chat-avatar av-user">👤</div><div class="chat-bubble bubble-user">${text}</div>`;
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+
+function a1ShowTyping(){
+  const msgs=document.getElementById('a1-messages');
+  if(!msgs)return;
+  const d=document.createElement('div');
+  d.className='chat-msg';d.id='a1-typing';
+  d.innerHTML=`<div class="chat-avatar av-bot">AI</div><div class="chat-bubble bubble-bot typing-dots"><span></span><span></span><span></span></div>`;
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+
+async function a1Send(preset){
+  const input=document.getElementById('a1-input');
+  const text=preset||(input?input.value.trim():'');
+  if(!text||agentTyping)return;
+  if(input)input.value='';
+  a1AddUser(text);
+  chatHistory.push({role:'user',content:text});
+  agentTyping=true;
+  const sendBtn=document.getElementById('a1-send');
+  if(sendBtn)sendBtn.disabled=true;
+  a1ShowTyping();
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:1000,
+      system:`Eres el agente de atención al cliente de "${storeConfig.name}". Datos: entrega ${storeConfig.delivery}, devoluciones ${storeConfig.returns}, pagos ${storeConfig.payments}. Responde en español, máximo 3-4 frases, tono cálido y directo. Si no puedes resolver algo di que lo trasladas al equipo.`,
+      messages:chatHistory
+    })});
+    const data=await r.json();
+    const reply=data.content?.[0]?.text||'Ha ocurrido un error. Inténtalo de nuevo.';
+    document.getElementById('a1-typing')?.remove();
+    a1AddBot(reply);
+    chatHistory.push({role:'assistant',content:reply});
+  }catch{
+    document.getElementById('a1-typing')?.remove();
+    a1AddBot('Error de conexión. Por favor inténtalo de nuevo.');
+  }
+  agentTyping=false;
+  if(sendBtn)sendBtn.disabled=false;
+}
+
+// ── AGENT 2: FICHAS ──
+function buildAgent2(){
+  const wrap=document.createElement('div');
+  wrap.className='fichas-wrap';
+  wrap.style.height='100%';
+  wrap.innerHTML=`
+  <div class="fichas-form">
+    <div class="agent-field"><label>Nombre del producto *</label><input id="a2-name" placeholder="ej: Cama ortopédica para perros XL"></div>
+    <div class="agent-field"><label>Precio (€)</label><input id="a2-price" type="number" placeholder="49.99"></div>
+    <div class="agent-field"><label>Categoría</label>
+      <select id="a2-cat"><option>Mascotas premium</option><option>Hogar y organización</option><option>Oficina</option><option>Bebé</option><option>Exterior</option><option>Moda</option><option>Electrónica</option><option>Otro</option></select>
+    </div>
+    <div class="agent-field"><label>Características</label><textarea id="a2-feat" placeholder="ej: memoria de forma, lavable, tallas S/M/L..."></textarea></div>
+    <div class="agent-field"><label>Tono</label>
+      <select id="a2-tone"><option>Cálido y premium</option><option>Técnico y detallado</option><option>Divertido</option><option>Minimalista</option></select>
+    </div>
+    <button class="agent-btn" id="a2-btn" onclick="generateFicha()"><span id="a2-btn-text">✨ Generar ficha</span></button>
+  </div>
+  <div class="fichas-output" id="a2-output">
+    <div class="output-empty"><div class="output-empty-icon">✍️</div><div style="font-size:.8rem;color:var(--muted)">Rellena los datos y genera</div></div>
+  </div>`;
+  return wrap;
+}
+
+async function generateFicha(){
+  const name=document.getElementById('a2-name')?.value.trim();
+  if(!name){showToast('⚠ Introduce el nombre del producto');return;}
+  const price=document.getElementById('a2-price')?.value;
+  const cat=document.getElementById('a2-cat')?.value;
+  const feat=document.getElementById('a2-feat')?.value;
+  const tone=document.getElementById('a2-tone')?.value;
+  const btn=document.getElementById('a2-btn');
+  const btnText=document.getElementById('a2-btn-text');
+  btn.disabled=true;btnText.innerHTML='<div class="spinner"></div> Generando...';
+  document.getElementById('a2-output').innerHTML='<div style="padding:2rem;text-align:center;font-size:.8rem;color:var(--muted)">Generando tu ficha...</div>';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:1000,
+      messages:[{role:'user',content:`Genera una ficha de producto completa en español para Shopify. Producto: ${name}. Precio: ${price?price+'€':'no especificado'}. Categoría: ${cat}. Características: ${feat||'usa las más comunes'}. Tono: ${tone}. Genera exactamente:\n1. TÍTULO SEO (70 chars)\n2. DESCRIPCIÓN CORTA (2-3 frases emocionales)\n3. DESCRIPCIÓN LARGA (400 palabras: problema→solución→características→garantía)\n4. BULLETS (6 puntos con emoji)\n5. META DESCRIPTION (155 chars)\n6. TAGS SHOPIFY (10 tags)`}]
+    })});
+    const data=await r.json();
+    const text=data.content?.[0]?.text||'';
+    const sections=[['TÍTULO SEO','Título SEO'],['DESCRIPCIÓN CORTA','Desc. corta'],['DESCRIPCIÓN LARGA','Desc. larga'],['BULLETS','Bullets'],['META DESCRIPTION','Meta desc.'],['TAGS','Tags Shopify']];
+    let html='';
+    sections.forEach(([key,label],i)=>{
+      const rx=new RegExp(`${i+1}\\.\\s*${key}[^\n]*\n([\\s\\S]*?)(?=\\n${i+2}\\.|$)`,'i');
+      const m=text.match(rx);
+      if(m){
+        const c=m[1].trim();
+        html+=`<div class="result-block"><div class="result-block-head"><span class="result-block-label">${label}</span><button class="copy-mini" onclick="copyMini(this,\`${c.replace(/`/g,'\\`')}\`)">Copiar</button></div><div class="result-block-body">${c}</div></div>`;
+      }
+    });
+    if(!html)html=`<div class="result-block"><div class="result-block-body">${text}</div></div>`;
+    document.getElementById('a2-output').innerHTML=html;
+  }catch{document.getElementById('a2-output').innerHTML='<div style="padding:2rem;text-align:center;font-size:.8rem;color:#f87171">Error de conexión.</div>';}
+  btn.disabled=false;btnText.textContent='✨ Generar ficha';
+}
+
+function copyMini(btn,text){
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='✅';btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent='Copiar';btn.classList.remove('ok');},2000);
+  });
+}
+
+// ── AGENT 3: CARRITOS ──
+function buildAgent3(){
+  const wrap=document.createElement('div');
+  wrap.className='carritos-wrap';
+  wrap.innerHTML=`
+  <div class="carritos-sidebar">
+    <div class="agent-field"><label>Tienda</label><input id="a3-store" value="Mi Tienda" placeholder="Mi Tienda"></div>
+    <div class="agent-field"><label>Producto abandonado</label><input id="a3-product" placeholder="ej: Cama ortopédica XL"></div>
+    <div class="agent-field"><label>Precio (€)</label><input id="a3-price" type="number" placeholder="49.99"></div>
+    <div class="agent-field"><label>Canal</label>
+      <select id="a3-channel"><option>Email</option><option>WhatsApp</option><option>Ambos</option></select>
+    </div>
+    <div class="agent-field"><label>Descuento (%)</label><input id="a3-discount" type="number" placeholder="ej: 10" min="0" max="50"></div>
+    <div class="agent-field"><label>Objeción principal</label>
+      <select id="a3-obj"><option>Precio alto</option><option>Dudas sobre envío</option><option>Dudas sobre calidad</option><option>Política devoluciones</option></select>
+    </div>
+    <button class="agent-btn" id="a3-btn" onclick="generateCarritos()"><span id="a3-btn-text">⚡ Generar secuencia</span></button>
+  </div>
+  <div class="carritos-output" id="a3-output">
+    <div class="output-empty"><div class="output-empty-icon">📧</div><div style="font-size:.8rem;color:var(--muted)">Configura y genera la secuencia</div></div>
+  </div>`;
+  return wrap;
+}
+
+async function generateCarritos(){
+  const product=document.getElementById('a3-product')?.value.trim();
+  if(!product){showToast('⚠ Introduce el producto abandonado');return;}
+  const store=document.getElementById('a3-store')?.value||'la tienda';
+  const price=document.getElementById('a3-price')?.value;
+  const channel=document.getElementById('a3-channel')?.value;
+  const discount=document.getElementById('a3-discount')?.value;
+  const obj=document.getElementById('a3-obj')?.value;
+  const btn=document.getElementById('a3-btn');
+  const btnText=document.getElementById('a3-btn-text');
+  btn.disabled=true;btnText.innerHTML='<div class="spinner"></div> Generando...';
+  document.getElementById('a3-output').innerHTML='<div style="padding:2rem;text-align:center;font-size:.8rem;color:var(--muted)">Generando secuencia...</div>';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:1000,
+      messages:[{role:'user',content:`Genera 3 mensajes de recuperación de carrito abandonado en español para: Tienda: ${store}, Producto: ${product}, Precio: ${price?price+'€':'no especificado'}, Canal: ${channel}, Descuento: ${discount?discount+'%':'sin descuento'}, Objeción principal: ${obj}.\n\nEstructura para cada mensaje:\nMENSAJE 1 — [1 hora después]\nASUNTO: ...\nPRE-HEADER: ...\nCUERPO:\n...\nCTA: ...\n\nMENSAJE 2 — [24 horas después]\n...\n\nMENSAJE 3 — [72 horas después]\n...`}]
+    })});
+    const data=await r.json();
+    const text=data.content?.[0]?.text||'';
+    const timings=['1h después','24h después','72h - última oportunidad'];
+    const focuses=['Recordatorio suave','Prueba social + objeción','Urgencia + oferta'];
+    const parts=text.split(/MENSAJE\s+\d+\s*[—\-]/i).filter(p=>p.trim());
+    let html='';
+    parts.forEach((part,i)=>{
+      const asunto=(part.match(/ASUNTO:\s*(.+)/i)||[])[1]||'';
+      const pre=(part.match(/PRE-HEADER:\s*(.+)/i)||[])[1]||'';
+      const cta=(part.match(/CTA:\s*(.+)/i)||[])[1]||'';
+      const bodyM=part.match(/CUERPO:\n([\s\S]*?)(?=CTA:|$)/i);
+      const body=bodyM?bodyM[1].trim():part.trim();
+      const full=`ASUNTO: ${asunto}\nPRE-HEADER: ${pre}\n\n${body}\n\nCTA: ${cta}`;
+      html+=`<div class="email-seq-card">
+        <div class="email-seq-head">
+          <div class="email-seq-meta">
+            <div class="email-seq-num">${i+1}</div>
+            <div>
+              <div class="email-seq-title">${focuses[i]||'Mensaje '+(i+1)}</div>
+              <div style="font-size:.68rem;color:var(--muted)">${timings[i]||''}</div>
+            </div>
+          </div>
+          <button class="copy-mini" onclick="copyMini(this,\`${full.replace(/`/g,'\\`')}\`)">Copiar</button>
+        </div>
+        <div class="email-seq-body">
+          ${asunto?`<div class="email-field-label">Asunto</div><div class="email-field-val email-asunto">${asunto}</div>`:''}
+          ${pre?`<div class="email-field-label">Pre-header</div><div class="email-field-val">${pre}</div>`:''}
+          <div class="email-field-label">Cuerpo</div><div class="email-field-val">${body}</div>
+          ${cta?`<div class="email-field-label">CTA</div><div class="email-field-val email-asunto">${cta}</div>`:''}
+        </div>
+      </div>`;
+    });
+    if(!html)html=`<div class="email-seq-card"><div class="email-seq-body">${text}</div></div>`;
+    document.getElementById('a3-output').innerHTML=html;
+  }catch{document.getElementById('a3-output').innerHTML='<div style="padding:2rem;text-align:center;font-size:.8rem;color:#f87171">Error. Inténtalo de nuevo.</div>';}
+  btn.disabled=false;btnText.textContent='⚡ Generar secuencia';
+}
+
+// ── AGENT 4: INVESTIGADOR ──
+function buildAgent4(){
+  const wrap=document.createElement('div');
+  wrap.className='invest-wrap';
+  wrap.innerHTML=`
+  <div class="invest-search">
+    <input class="invest-input" id="a4-query" placeholder="ej: accesorios premium para mascotas, gadgets de oficina..." onkeydown="if(event.key==='Enter')searchProducts()">
+    <button class="invest-search-btn" id="a4-btn" onclick="searchProducts()"><span id="a4-btn-text">🔍 Analizar</span></button>
+  </div>
+  <div id="a4-results">
+    <div class="output-empty" style="padding:3rem 0"><div class="output-empty-icon">🔍</div><div style="font-size:.82rem;color:var(--muted);max-width:260px;line-height:1.6;text-align:center">Describe un nicho o categoría para encontrar productos con potencial</div></div>
+  </div>`;
+  return wrap;
+}
+
+async function searchProducts(){
+  const query=document.getElementById('a4-query')?.value.trim();
+  if(!query)return;
+  const btn=document.getElementById('a4-btn');
+  const btnText=document.getElementById('a4-btn-text');
+  btn.disabled=true;btnText.innerHTML='<div class="spinner"></div>';
+  document.getElementById('a4-results').innerHTML='<div style="padding:2rem;text-align:center;font-size:.8rem;color:var(--muted)">Analizando nicho...</div>';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:1000,
+      messages:[{role:'user',content:`Analiza este nicho para dropshipping en España y devuelve SOLO JSON válido sin markdown:\n{"productos":[{"nombre":"string","emoji":"string","precio_min":number,"precio_max":number,"margen":number,"score":number,"competencia":"baja/media/alta","tendencia":"alza/estable/bajando","buscar_en":"string en inglés","color":"hex suave"}]}\n\nNICHO: ${query}\nGenera 6 productos específicos y realistas. Margen debe ser 35-65 para dropshipping.`}]
+    })});
+    const data=await r.json();
+    const text=data.content?.[0]?.text||'{}';
+    const clean=text.replace(/```json|```/g,'').trim();
+    const parsed=JSON.parse(clean);
+    const bgs=['#c8f54215','#93c5fd18','#fbbf2415','#f9a8d418','#86efac15','#c4b5fd15'];
+    let html='<div class="products-grid">';
+    (parsed.productos||[]).forEach((p,i)=>{
+      const bg=p.color||bgs[i%bgs.length];
+      const pct=Math.min(100,Math.max(0,p.margen||50));
+      html+=`<div class="product-mini">
+        <div class="product-mini-thumb" style="background:${bg}">
+          <span style="font-size:2rem">${p.emoji||'📦'}</span>
+          <div class="product-mini-score">${p.score}/10</div>
+        </div>
+        <div class="product-mini-body">
+          <div class="product-mini-name">${p.nombre}</div>
+          <div class="product-mini-price">${p.precio_min}–${p.precio_max}€ · ${p.competencia} competencia · ${p.tendencia}</div>
+          <div class="product-mini-bar">
+            <span class="mini-bar-label">Margen</span>
+            <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${pct}%"></div></div>
+            <span class="mini-bar-val">${p.margen}%</span>
+          </div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:.5rem">AliExpress: <span style="color:var(--accent)">${p.buscar_en||'—'}</span></div>
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+    document.getElementById('a4-results').innerHTML=html;
+  }catch{document.getElementById('a4-results').innerHTML='<div style="padding:2rem;text-align:center;font-size:.8rem;color:#f87171">Error. Inténtalo de nuevo.</div>';}
+  btn.disabled=false;btnText.textContent='🔍 Analizar';
+}
+
+// ── AGENT 5: DASHBOARD ──
+function buildAgent5(){
+  const wrap=document.createElement('div');
+  wrap.className='dash-wrap';
+  wrap.innerHTML=`
+  <div class="dash-left">
+    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.82rem;margin-bottom:.85rem;color:var(--soft)">📊 Métricas de hoy</div>
+    <div class="metrics-2col">
+      <div class="metric-box"><label>Visitas</label><input id="d-visits" type="number" placeholder="0"></div>
+      <div class="metric-box"><label>Conversión %</label><input id="d-conv" type="number" step="0.1" placeholder="0.0"></div>
+      <div class="metric-box"><label>Ventas €</label><input id="d-rev" type="number" placeholder="0"></div>
+      <div class="metric-box"><label>Pedidos</label><input id="d-orders" type="number" placeholder="0"></div>
+      <div class="metric-box"><label>Carritos abnd.</label><input id="d-carts" type="number" placeholder="0"></div>
+      <div class="metric-box"><label>Rebote %</label><input id="d-bounce" type="number" placeholder="0"></div>
+      <div class="metric-box"><label>Ticket medio €</label><input id="d-aov" type="number" placeholder="0"></div>
+      <div class="metric-box"><label>Nuevos suscrip.</label><input id="d-subs" type="number" placeholder="0"></div>
+    </div>
+    <button class="agent-btn" id="d-btn" onclick="analyzeDash()"><span id="d-btn-text">⚡ Analizar el día</span></button>
+  </div>
+  <div class="dash-right" id="d-output">
+    <div class="output-empty" style="height:100%"><div class="output-empty-icon">📊</div><div style="font-size:.8rem;color:var(--muted);text-align:center;max-width:200px;line-height:1.6">Introduce las métricas y obtén tu plan de acción de hoy</div></div>
+  </div>`;
+  return wrap;
+}
+
+async function analyzeDash(){
+  const m={visits:document.getElementById('d-visits')?.value||0,conv:document.getElementById('d-conv')?.value||0,rev:document.getElementById('d-rev')?.value||0,orders:document.getElementById('d-orders')?.value||0,carts:document.getElementById('d-carts')?.value||0,bounce:document.getElementById('d-bounce')?.value||0,aov:document.getElementById('d-aov')?.value||0,subs:document.getElementById('d-subs')?.value||0};
+  const btn=document.getElementById('d-btn');
+  const btnText=document.getElementById('d-btn-text');
+  btn.disabled=true;btnText.innerHTML='<div class="spinner"></div> Analizando...';
+  document.getElementById('d-output').innerHTML='<div style="padding:2rem;text-align:center;font-size:.8rem;color:var(--muted)">Analizando...</div>';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:1000,
+      messages:[{role:'user',content:`Analiza estos datos de ecommerce y devuelve SOLO JSON válido sin markdown:\n{"semaforo":"VERDE/AMARILLO/ROJO","razon":"1 frase","accion":{"titulo":"string","detalle":"string"},"oportunidad":{"titulo":"string","detalle":"string"},"manana":"string","escenario":"string"}\n\nDATOS: Visitas:${m.visits}, Conversión:${m.conv}%, Ventas:${m.rev}€, Pedidos:${m.orders}, Carritos abandonados:${m.carts}, Rebote:${m.bounce}%, Ticket medio:${m.aov}€, Suscriptores:${m.subs}\n\nSé específico y práctico.`}]
+    })});
+    const data=await r.json();
+    const text=data.content?.[0]?.text||'{}';
+    const clean=text.replace(/```json|```/g,'').trim();
+    const d=JSON.parse(clean);
+    const sc=d.semaforo==='VERDE'?'sem-verde':d.semaforo==='AMARILLO'?'sem-amarillo':'sem-rojo';
+    const em=d.semaforo==='VERDE'?'✅':d.semaforo==='AMARILLO'?'⚠️':'🚨';
+    let html=`<div class="semaphore-block ${sc}"><div class="sem-circle">${em}</div><div><div class="sem-status">${d.semaforo||'—'}</div><div class="sem-text">${d.razon||''}</div></div></div>`;
+    if(d.accion)html+=`<div class="action-block"><div class="action-block-head"><div class="action-num">1</div><div class="action-title">${d.accion.titulo}</div><span class="action-badge ab-now">AHORA</span></div><div class="action-body">${d.accion.detalle}</div></div>`;
+    if(d.oportunidad)html+=`<div class="action-block"><div class="action-block-head"><div class="action-num">2</div><div class="action-title">${d.oportunidad.titulo}</div><span class="action-badge ab-opp">OPORTUNIDAD</span></div><div class="action-body">${d.oportunidad.detalle}</div></div>`;
+    if(d.escenario)html+=`<div class="action-block"><div class="action-block-head"><div class="action-num">3</div><div class="action-title">Si ejecutas esto...</div></div><div class="action-body">${d.escenario}</div></div>`;
+    if(d.manana)html+=`<div style="background:var(--s3);border-radius:10px;padding:.85rem 1rem;font-size:.78rem;color:var(--muted);line-height:1.65"><span style="font-size:.65rem;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:.4rem">Mañana revisa</span>${d.manana}</div>`;
+    document.getElementById('d-output').innerHTML=`<div style="padding:1.25rem">${html}</div>`;
+  }catch{document.getElementById('d-output').innerHTML='<div style="padding:2rem;text-align:center;font-size:.8rem;color:#f87171">Error. Inténtalo de nuevo.</div>';}
+  btn.disabled=false;btnText.textContent='⚡ Analizar el día';
+}
+
+// ── UTILS ──
+function showToast(msg,success=false){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast'+(success?' success':'');
+  setTimeout(()=>t.classList.add('show'),10);
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+function revealObserver(){
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.08});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+}
+</script>
+</body>
+</html>
