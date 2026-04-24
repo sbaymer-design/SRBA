@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "functions": {
+    "api/stripe-webhook.js": {
+      "memory": 256,
+      "maxDuration": 10
+    },
+    "api/get-plan.js": {
+      "memory": 128,
+      "maxDuration": 5
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}
