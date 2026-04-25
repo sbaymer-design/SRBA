@@ -497,6 +497,10 @@ header{background:var(--ink);padding:.85rem 1.5rem;display:flex;align-items:cent
 .ab-now{background:rgba(248,113,113,.12);color:#f87171;border:1px solid rgba(248,113,113,.2)}
 .ab-opp{background:rgba(200,245,66,.1);color:var(--accent);border:1px solid rgba(200,245,66,.2)}
 .action-body{padding:.85rem 1rem;font-size:.78rem;color:var(--soft);line-height:1.65}
+
+.plan-badge-master{background:linear-gradient(135deg,rgba(200,245,66,.25),rgba(251,191,36,.2));color:var(--accent);border:1px solid rgba(200,245,66,.4);font-weight:700;}
+.user-plan-badge.plan-badge-master{background:linear-gradient(135deg,#c8f542,#fbbf24);color:#1a1a18;border:none;}
+
 </style>
 <script src="https://js.stripe.com/v3/"></script>
 <meta name="stripe-pk" content="pk_live_51TPmdV2OeVtjAJocHNtTomXVGgKfzaiiViiVRfhsEpRa9yUWlvHKqlyMpU0AAkRqlCLYoSkf3u0KzwU80q5XG4Fl007VUec3vi">
@@ -912,7 +916,16 @@ header{background:var(--ink);padding:.85rem 1.5rem;display:flex;align-items:cent
 
 <script>
 // ── STATE ──
-const PLANS = {free:{name:'Gratis',agents:[1,2],badge:'plan-badge-free',label:'Gratis'},pro:{name:'Pro',agents:[1,2,3,4],badge:'plan-badge-pro',label:'Pro'},scale:{name:'Scale',agents:[1,2,3,4,5],badge:'plan-badge-scale',label:'Scale'}};
+
+// ── CUENTA MAESTRA ──
+const MASTER = {
+  email: 'malditogamerpokemony@gmail.com',
+  pass: 'ContraCuentaMaestra2026',
+  name: 'SRBA Admin',
+  plan: 'master'
+};
+
+const PLANS = {free:{name:'Gratis',agents:[1,2],badge:'plan-badge-free',label:'Gratis'},pro:{name:'Pro',agents:[1,2,3,4],badge:'plan-badge-pro',label:'Pro'},scale:{name:'Scale',agents:[1,2,3,4,5],badge:'plan-badge-scale',label:'Scale'},master:{name:'Master',agents:[1,2,3,4,5],badge:'plan-badge-master',label:'Master'}};
 let currentUser = null;
 let selectedPlan = 'pro';
 let chatHistory = [];
@@ -1016,20 +1029,33 @@ function doRegister(){
 function doLogin(){
   const email=document.getElementById('login-email').value.trim();
   const pass=document.getElementById('login-pass').value;
-  if(!email||!pass){showToast('⚠ Completa todos los campos');return;}
-  const saved=loadUser();
+  if(!email||!pass){showToast('\u26a0 Completa todos los campos');return;}
   const btn=document.getElementById('login-btn');
   btn.disabled=true;
   document.getElementById('login-btn-text').innerHTML='<div class="spinner"></div> Entrando...';
   setTimeout(()=>{
-    if(saved&&saved.email===email){
-      currentUser=saved; applyUser();
+    // Cuenta maestra — acceso total
+    if(email===MASTER.email && pass===MASTER.pass){
+      currentUser={name:MASTER.name,email:MASTER.email,plan:'master',createdAt:new Date().toISOString()};
+      saveUser(currentUser);
+      applyUser();
       closeModal('authModal');
-      showToast(`✅ Bienvenido/a de nuevo, ${saved.name.split(' ')[0]}!`,true);
+      showToast('\uD83D\uDD11 Acceso maestro activado',true);
+      btn.disabled=false;
+      document.getElementById('login-btn-text').textContent='Iniciar sesi\u00f3n \u2192';
+      return;
+    }
+    // Usuario normal
+    const saved=loadUser();
+    if(saved&&saved.email===email){
+      currentUser=saved;
+      applyUser();
+      closeModal('authModal');
+      showToast('Bienvenido/a de nuevo, '+saved.name.split(' ')[0]+'!',true);
     } else {
       btn.disabled=false;
-      document.getElementById('login-btn-text').textContent='Iniciar sesión →';
-      showToast('⚠ Email o contraseña incorrectos. ¿Tienes cuenta?');
+      document.getElementById('login-btn-text').textContent='Iniciar sesi\u00f3n \u2192';
+      showToast('Email o contrase\u00f1a incorrectos');
     }
   },1000);
 }
@@ -1041,7 +1067,7 @@ function applyUser(){
   document.getElementById('btnRegister').style.display='none';
   document.getElementById('userAvatar').textContent=currentUser.name[0].toUpperCase();
   document.getElementById('userName').textContent=currentUser.name.split(' ')[0];
-  document.getElementById('userPlanBadge').textContent=plan.label;
+  document.getElementById('userPlanBadge').textContent=currentUser.plan==='master'?'👑 Master':plan.label;
   document.getElementById('userPlanBadge').className='user-plan-badge '+plan.badge;
   updateTiles();
 }
@@ -1049,6 +1075,14 @@ function applyUser(){
 function updateTiles(){
   const plan=PLANS[currentUser?.plan||''];
   const allowed=plan?plan.agents:[];
+  // Master tiene acceso a todo
+  if(currentUser?.plan==='master'){
+    [1,2,3,4,5].forEach(i=>{
+      const tile=document.getElementById('tile-'+i);
+      if(tile){tile.classList.remove('locked');tile.classList.add('unlocked');}
+    });
+    return;
+  }
   [1,2,3,4,5].forEach(i=>{
     const tile=document.getElementById('tile-'+i);
     if(!tile)return;
@@ -1073,6 +1107,7 @@ function logout(){
 
 function handleAgentClick(id){
   if(!currentUser){openModal('login');return;}
+  if(currentUser.plan==='master'){openAgent(id);return;}
   const plan=PLANS[currentUser.plan]||PLANS.free;
   if(!plan.agents.includes(id)){
     const required=id<=2?'Gratis':id<=4?'Pro':'Scale';
