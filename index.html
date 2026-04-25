@@ -97,27 +97,32 @@ h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.9rem,3.2vw,2.
 /* ── PRICING ── */
 #precios{background:var(--bg)}
 .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:var(--r);overflow:hidden}
-.pricing-card{background:var(--s1);padding:2rem}
-.pricing-card.popular{background:var(--s2);position:relative}
-.popular-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--accent);color:#1a1a18;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.28rem .9rem;border-radius:0 0 8px 8px;white-space:nowrap}
-.plan-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;color:var(--text);margin-bottom:.35rem}
-.plan-desc{font-size:.8rem;color:var(--muted);margin-bottom:1.75rem;line-height:1.55}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;background:transparent;border-radius:var(--r);overflow:visible}
+.pricing-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:2.25rem;transition:transform .2s,box-shadow .2s,border-color .2s;position:relative}
+.pricing-card:hover{transform:translateY(-4px);box-shadow:0 24px 64px rgba(0,0,0,.35);border-color:var(--border2)}
+.pricing-card.popular{background:var(--s2);border-color:rgba(200,245,66,.35);transform:scale(1.04);box-shadow:0 0 0 1px rgba(200,245,66,.2),0 24px 64px rgba(0,0,0,.4)}
+.pricing-card.popular:hover{transform:scale(1.04) translateY(-4px)}
+.popular-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--accent);color:#1a1a18;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.32rem 1rem;border-radius:100px;white-space:nowrap;box-shadow:0 4px 12px rgba(200,245,66,.3)}
+.plan-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;color:var(--text);margin-bottom:.4rem}
+.plan-desc{font-size:.8rem;color:var(--muted);margin-bottom:1.75rem;line-height:1.6}
 .plan-price{display:flex;align-items:baseline;gap:.3rem;margin-bottom:.3rem}
-.plan-cur{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;color:var(--muted)}
-.plan-val{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--text);line-height:1}
-.plan-period{font-size:.8rem;color:var(--muted)}
+.plan-cur{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;color:var(--accent);opacity:.8}
+.plan-val{font-family:'Syne',sans-serif;font-size:3.6rem;font-weight:800;color:#ffffff;line-height:1;text-shadow:0 0 40px rgba(200,245,66,.15)}
+.pricing-card.popular .plan-val{color:var(--accent)}
+.plan-period{font-size:.82rem;color:var(--soft);font-weight:400}
 .plan-setup{font-size:.75rem;color:var(--muted);margin-bottom:1.75rem}
 .popular .plan-val{color:var(--accent)}
-.plan-features{list-style:none;display:flex;flex-direction:column;gap:.5rem;margin-bottom:2rem}
-.plan-features li{font-size:.825rem;color:var(--soft);display:flex;align-items:flex-start;gap:.6rem;line-height:1.45}
-.feat-check{color:var(--accent);flex-shrink:0;font-size:.8rem;margin-top:.1rem}
-.feat-x{color:var(--border2);flex-shrink:0;font-size:.8rem;margin-top:.1rem}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-bottom:2rem}
+.plan-features li{font-size:.85rem;color:var(--soft);display:flex;align-items:flex-start;gap:.65rem;line-height:1.5;padding:.35rem 0;border-bottom:1px solid var(--border)}
+.plan-features li:last-child{border-bottom:none}
+.feat-check{color:var(--accent);flex-shrink:0;font-size:.9rem;margin-top:.05rem;font-weight:700}
+.feat-x{color:var(--border2);flex-shrink:0;font-size:.9rem;margin-top:.05rem}
 .feat-disabled{color:var(--muted)}
-.plan-btn{width:100%;padding:.85rem;border-radius:100px;font-family:'Instrument Sans',sans-serif;font-size:.875rem;font-weight:500;cursor:pointer;transition:all .2s;border:none}
-.plan-btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border2)}
-.plan-btn-ghost:hover{border-color:var(--soft);background:var(--s2)}
-.plan-btn-solid{background:var(--accent);color:#1a1a18;box-shadow:0 0 24px rgba(200,245,66,.2)}
-.plan-btn-solid:hover{opacity:.9;box-shadow:0 0 36px rgba(200,245,66,.3)}
+.plan-btn{width:100%;padding:.9rem;border-radius:100px;font-family:'Instrument Sans',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;border:none;letter-spacing:.01em}
+.plan-btn-ghost{background:transparent;color:var(--text);border:1.5px solid var(--border2)}
+.plan-btn-ghost:hover{border-color:var(--accent);color:var(--accent);background:rgba(200,245,66,.05)}
+.plan-btn-solid{background:var(--accent);color:#1a1a18;box-shadow:0 0 32px rgba(200,245,66,.25),0 4px 16px rgba(0,0,0,.2)}
+.plan-btn-solid:hover{opacity:.92;transform:translateY(-1px);box-shadow:0 0 48px rgba(200,245,66,.4),0 8px 24px rgba(0,0,0,.25)}
 
 /* ── MODAL BASE ── */
 .modal-bg{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;pointer-events:none;transition:opacity .25s}
@@ -713,123 +718,186 @@ header{background:var(--ink);padding:.85rem 1.5rem;display:flex;align-items:cent
 <!-- CONTACTO -->
 <section id="skills" style="background:var(--s1);padding:6rem 2rem">
   <div style="max-width:1100px;margin:0 auto">
-    <span style="font-size:.7rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem;display:block">Skills de Claude</span>
-    <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.9rem,3.2vw,3rem);letter-spacing:-.03em;line-height:1.06;color:var(--text);margin-bottom:1rem">Potencia Claude con<br>Skills profesionales</h2>
-    <p style="font-size:.975rem;color:var(--soft);font-weight:300;line-height:1.8;margin-bottom:3.5rem;max-width:500px">Sistemas de prompts avanzados listos para instalar. Compra una vez, úsalos para siempre en Claude.</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem">
-      <div style="background:var(--s2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='var(--border2)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
-        <div style="height:130px;background:linear-gradient(135deg,#c8f542,#8faa2e);display:flex;align-items:center;justify-content:center;font-size:2.25rem">🛒</div>
-        <div style="padding:1.25rem">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.45rem">
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text)">Ecommerce Pro Pack</div>
-            <span style="background:rgba(200,245,66,.12);color:var(--accent);font-size:.62rem;font-weight:600;padding:.16rem .5rem;border-radius:100px;border:1px solid rgba(200,245,66,.25)">Más vendido</span>
-          </div>
-          <p style="font-size:.8rem;color:var(--soft);line-height:1.6;margin-bottom:.85rem">15 prompts optimizados para Shopify: fichas, emails, atención al cliente y análisis de métricas.</p>
-          <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.85rem;flex-wrap:wrap"><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>Shopify</span><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>Dropshipping</span><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>Claude</span></div>
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;color:var(--text)">19€</div>
-            <button onclick="openModal('register')" style="background:var(--accent);color:#1a1a18;border:none;border-radius:100px;padding:.45rem 1.1rem;font-size:.78rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif">Comprar →</button>
-          </div>
+    <span style="font-size:.7rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem;display:block">Skills especializadas</span>
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;flex-wrap:wrap;margin-bottom:3.5rem">
+      <div>
+        <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.9rem,3.2vw,3rem);letter-spacing:-.03em;line-height:1.06;color:var(--text);margin-bottom:1rem">Herramientas avanzadas<br>que usamos por ti</h2>
+        <p style="font-size:.975rem;color:var(--soft);font-weight:300;line-height:1.8;max-width:520px">Más allá de los agentes, SRBA despliega skills especializadas de Claude para resolver necesidades concretas de tu negocio. Tú pides el resultado, nosotros lo ejecutamos.</p>
+      </div>
+      <a href="#contacto" style="background:var(--accent);color:#1a1a18;border:none;border-radius:100px;padding:.9rem 2rem;font-size:.9rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:.5rem;transition:opacity .2s" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">Solicitar un servicio →</a>
+    </div>
+
+    <!-- CÓMO FUNCIONA -->
+    <div style="background:var(--s2);border:1px solid var(--border);border-radius:16px;padding:1.5rem 2rem;margin-bottom:2.5rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap">
+      <div style="font-size:1.5rem;flex-shrink:0">💡</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text);margin-bottom:.3rem">¿Cómo funciona?</div>
+        <div style="font-size:.82rem;color:var(--soft);line-height:1.65">Nos dices qué necesitas. Nosotros aplicamos la skill adecuada de Claude y te entregamos el resultado listo para usar — una web, un análisis, una extensión, un dashboard. Sin que tengas que saber nada de IA.</div>
+      </div>
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap;flex-shrink:0;margin-left:auto">
+        <div style="text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--accent)">1</div>
+          <div style="font-size:.7rem;color:var(--muted)">Nos pides<br>el resultado</div>
         </div>
-      </div>      <div style="background:var(--s2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='var(--border2)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
-        <div style="height:130px;background:linear-gradient(135deg,#93c5fd,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:2.25rem">🤖</div>
-        <div style="padding:1.25rem">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.45rem">
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text)">Agente de Ventas B2B</div>
-            <span style="background:rgba(147,197,253,.12);color:#93c5fd;font-size:.62rem;font-weight:600;padding:.16rem .5rem;border-radius:100px;border:1px solid rgba(147,197,253,.2)">Nuevo</span>
-          </div>
-          <p style="font-size:.8rem;color:var(--soft);line-height:1.6;margin-bottom:.85rem">Prospección, cualificación de leads, propuestas comerciales y seguimiento con IA.</p>
-          <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.85rem;flex-wrap:wrap"><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>B2B</span><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>Ventas</span><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>LinkedIn</span></div>
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;color:var(--text)">24€</div>
-            <button onclick="openModal('register')" style="background:var(--accent);color:#1a1a18;border:none;border-radius:100px;padding:.45rem 1.1rem;font-size:.78rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif">Comprar →</button>
-          </div>
+        <div style="text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--accent)">2</div>
+          <div style="font-size:.7rem;color:var(--muted)">Ejecutamos<br>la skill</div>
         </div>
-      </div>      <div style="background:var(--s2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='var(--border2)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
-        <div style="height:130px;background:linear-gradient(135deg,#f9a8d4,#ec4899);display:flex;align-items:center;justify-content:center;font-size:2.25rem">✍️</div>
-        <div style="padding:1.25rem">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.45rem">
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text)">Content Creator Kit</div>
-            
-          </div>
-          <p style="font-size:.8rem;color:var(--soft);line-height:1.6;margin-bottom:.85rem">20 prompts para crear contenido viral en TikTok, Instagram y LinkedIn con calendario editorial.</p>
-          <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.85rem;flex-wrap:wrap"><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>TikTok</span><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>Instagram</span><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>LinkedIn</span></div>
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;color:var(--text)">14€</div>
-            <button onclick="openModal('register')" style="background:var(--accent);color:#1a1a18;border:none;border-radius:100px;padding:.45rem 1.1rem;font-size:.78rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif">Comprar →</button>
-          </div>
-        </div>
-      </div>      <div style="background:var(--s2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='var(--border2)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
-        <div style="height:130px;background:linear-gradient(135deg,#fde68a,#f59e0b);display:flex;align-items:center;justify-content:center;font-size:2.25rem">📊</div>
-        <div style="padding:1.25rem">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.45rem">
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text)">Analista Financiero IA</div>
-            
-          </div>
-          <p style="font-size:.8rem;color:var(--soft);line-height:1.6;margin-bottom:.85rem">Analiza P&L, interpreta métricas, crea informes ejecutivos y toma decisiones financieras.</p>
-          <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.85rem;flex-wrap:wrap"><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>Finanzas</span><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>Reporting</span><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>Excel</span></div>
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;color:var(--text)">29€</div>
-            <button onclick="openModal('register')" style="background:var(--accent);color:#1a1a18;border:none;border-radius:100px;padding:.45rem 1.1rem;font-size:.78rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif">Comprar →</button>
-          </div>
-        </div>
-      </div>      <div style="background:var(--s2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='var(--border2)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
-        <div style="height:130px;background:linear-gradient(135deg,#a78bfa,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:2.25rem">⚖️</div>
-        <div style="padding:1.25rem">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.45rem">
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text)">Legal & Contratos</div>
-            <span style="background:rgba(167,139,250,.12);color:#a78bfa;font-size:.62rem;font-weight:600;padding:.16rem .5rem;border-radius:100px;border:1px solid rgba(167,139,250,.2)">Premium</span>
-          </div>
-          <p style="font-size:.8rem;color:var(--soft);line-height:1.6;margin-bottom:.85rem">Redacta y revisa contratos, términos de servicio, políticas de privacidad y avisos legales.</p>
-          <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.85rem;flex-wrap:wrap"><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>Legal</span><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>GDPR</span><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>Contratos</span></div>
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;color:var(--text)">39€</div>
-            <button onclick="openModal('register')" style="background:var(--accent);color:#1a1a18;border:none;border-radius:100px;padding:.45rem 1.1rem;font-size:.78rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif">Comprar →</button>
-          </div>
-        </div>
-      </div>      <div style="background:var(--s2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='var(--border2)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
-        <div style="height:130px;background:linear-gradient(135deg,#6ee7b7,#10b981);display:flex;align-items:center;justify-content:center;font-size:2.25rem">🔍</div>
-        <div style="padding:1.25rem">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.45rem">
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text)">SEO & Contenido Web</div>
-            
-          </div>
-          <p style="font-size:.8rem;color:var(--soft);line-height:1.6;margin-bottom:.85rem">Auditorías SEO, meta descriptions, artículos optimizados y estrategia de keywords con IA.</p>
-          <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.85rem;flex-wrap:wrap"><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>SEO</span><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>Blogging</span><span style='font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)'>Google</span></div>
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;color:var(--text)">19€</div>
-            <button onclick="openModal('register')" style="background:var(--accent);color:#1a1a18;border:none;border-radius:100px;padding:.45rem 1.1rem;font-size:.78rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif">Comprar →</button>
-          </div>
+        <div style="text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--accent)">3</div>
+          <div style="font-size:.7rem;color:var(--muted)">Recibes el<br>entregable</div>
         </div>
       </div>
-      
-      <div style="background:var(--s2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.borderColor='var(--border2)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
-        <div style="height:130px;background:linear-gradient(135deg,#4285f4,#0f9d58);display:flex;align-items:center;justify-content:center;font-size:2.25rem">🧩</div>
-        <div style="padding:1.25rem">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.45rem">
-            <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text)">Creador de Extensiones Chrome</div>
+    </div>
+
+    <!-- GRID DE SKILLS -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem">
+
+      <!-- Ecommerce Pro Pack -->
+      <div style="background:var(--s2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s" onmouseover="this.style.transform='translateY(-3px)';this.style.borderColor='var(--border2)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
+        <div style="height:110px;background:linear-gradient(135deg,#c8f542,#8faa2e);display:flex;align-items:center;justify-content:center;font-size:2rem;position:relative">
+          🛒
+          <span style="position:absolute;top:.6rem;right:.6rem;background:rgba(0,0,0,.25);color:#fff;font-size:.62rem;font-weight:600;padding:.18rem .55rem;border-radius:100px">Más usado</span>
+        </div>
+        <div style="padding:1.1rem">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text);margin-bottom:.35rem">Gestión completa de ecommerce</div>
+          <p style="font-size:.78rem;color:var(--soft);line-height:1.6;margin-bottom:.85rem">Fichas de producto, emails, atención al cliente y análisis de métricas para tu tienda Shopify. Le dices qué necesitas y te lo entregamos listo.</p>
+          <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.85rem">
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Shopify</span>
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Dropshipping</span>
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Copy & Emails</span>
           </div>
-          <p style="font-size:.8rem;color:var(--soft);line-height:1.6;margin-bottom:.85rem">Crea extensiones de Chrome personalizadas desde cero con Manifest V3. Popup premium, lógica completa e iconos incluidos. Lista para instalar en 2 minutos.</p>
-          <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.85rem;flex-wrap:wrap">
-            <span style="font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Chrome</span>
-            <span style="font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Manifest V3</span>
-            <span style="font-size:.65rem;padding:.15rem .5rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Sin instalar nada</span>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div style="font-family:'Syne',sans-serif;font-size:1.35rem;font-weight:800;color:var(--text)">14€</div>
-            <button onclick="openModal('register')" style="background:var(--accent);color:#1a1a18;border:none;border-radius:100px;padding:.45rem 1.1rem;font-size:.78rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif">Comprar →</button>
-          </div>
+          <a href="#contacto" style="display:flex;align-items:center;justify-content:space-between;background:var(--s3);border-radius:8px;padding:.6rem .85rem;text-decoration:none;transition:background .2s" onmouseover="this.style.background='rgba(200,245,66,.08)'" onmouseout="this.style.background='var(--s3)'">
+            <span style="font-size:.78rem;color:var(--accent);font-weight:500">Solicitar este servicio</span>
+            <span style="color:var(--accent);font-size:.85rem">→</span>
+          </a>
         </div>
       </div>
-      <div style="background:rgba(200,245,66,.04);border:1px dashed rgba(200,245,66,.2);border-radius:14px;padding:1.5rem;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.75rem">
-        <div style="font-size:2rem">🔮</div>
-        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text)">Skill a medida</div>
-        <p style="font-size:.8rem;color:var(--soft);line-height:1.6">Diseñamos un Skill personalizado para tu caso de uso específico.</p>
-        <button onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})" style="background:transparent;color:var(--accent);border:1px solid rgba(200,245,66,.25);border-radius:100px;padding:.45rem 1.1rem;font-size:.78rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif">Solicitar →</button>
+
+      <!-- Agente de Ventas B2B -->
+      <div style="background:var(--s2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s" onmouseover="this.style.transform='translateY(-3px)';this.style.borderColor='var(--border2)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
+        <div style="height:110px;background:linear-gradient(135deg,#93c5fd,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:2rem">🤖</div>
+        <div style="padding:1.1rem">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text);margin-bottom:.35rem">Agente de ventas B2B</div>
+          <p style="font-size:.78rem;color:var(--soft);line-height:1.6;margin-bottom:.85rem">Prospección, cualificación de leads, propuestas comerciales y seguimiento. Claude actúa como tu asistente de ventas y genera los materiales que necesitas.</p>
+          <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.85rem">
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">B2B</span>
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">LinkedIn</span>
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Propuestas</span>
+          </div>
+          <a href="#contacto" style="display:flex;align-items:center;justify-content:space-between;background:var(--s3);border-radius:8px;padding:.6rem .85rem;text-decoration:none;transition:background .2s" onmouseover="this.style.background='rgba(200,245,66,.08)'" onmouseout="this.style.background='var(--s3)'">
+            <span style="font-size:.78rem;color:var(--accent);font-weight:500">Solicitar este servicio</span>
+            <span style="color:var(--accent);font-size:.85rem">→</span>
+          </a>
+        </div>
       </div>
+
+      <!-- Content Creator Kit -->
+      <div style="background:var(--s2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s" onmouseover="this.style.transform='translateY(-3px)';this.style.borderColor='var(--border2)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
+        <div style="height:110px;background:linear-gradient(135deg,#f9a8d4,#ec4899);display:flex;align-items:center;justify-content:center;font-size:2rem">✍️</div>
+        <div style="padding:1.1rem">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text);margin-bottom:.35rem">Creación de contenido</div>
+          <p style="font-size:.78rem;color:var(--soft);line-height:1.6;margin-bottom:.85rem">Scripts virales para TikTok, Instagram y LinkedIn. Calendario editorial completo y análisis de tendencias. Entregamos el contenido listo para publicar.</p>
+          <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.85rem">
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">TikTok</span>
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Instagram</span>
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">LinkedIn</span>
+          </div>
+          <a href="#contacto" style="display:flex;align-items:center;justify-content:space-between;background:var(--s3);border-radius:8px;padding:.6rem .85rem;text-decoration:none;transition:background .2s" onmouseover="this.style.background='rgba(200,245,66,.08)'" onmouseout="this.style.background='var(--s3)'">
+            <span style="font-size:.78rem;color:var(--accent);font-weight:500">Solicitar este servicio</span>
+            <span style="color:var(--accent);font-size:.85rem">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Analista Financiero -->
+      <div style="background:var(--s2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s" onmouseover="this.style.transform='translateY(-3px)';this.style.borderColor='var(--border2)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
+        <div style="height:110px;background:linear-gradient(135deg,#fde68a,#f59e0b);display:flex;align-items:center;justify-content:center;font-size:2rem">📊</div>
+        <div style="padding:1.1rem">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text);margin-bottom:.35rem">Análisis financiero con IA</div>
+          <p style="font-size:.78rem;color:var(--soft);line-height:1.6;margin-bottom:.85rem">Interpretamos tu P&L, métricas y facturas. Generamos informes ejecutivos y dashboards visuales que te dicen exactamente en qué situación está tu negocio.</p>
+          <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.85rem">
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Facturas PDF</span>
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Dashboard</span>
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">IVA & Reporting</span>
+          </div>
+          <a href="#contacto" style="display:flex;align-items:center;justify-content:space-between;background:var(--s3);border-radius:8px;padding:.6rem .85rem;text-decoration:none;transition:background .2s" onmouseover="this.style.background='rgba(200,245,66,.08)'" onmouseout="this.style.background='var(--s3)'">
+            <span style="font-size:.78rem;color:var(--accent);font-weight:500">Solicitar este servicio</span>
+            <span style="color:var(--accent);font-size:.85rem">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Legal & Contratos -->
+      <div style="background:var(--s2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s" onmouseover="this.style.transform='translateY(-3px)';this.style.borderColor='var(--border2)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
+        <div style="height:110px;background:linear-gradient(135deg,#a78bfa,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:2rem">⚖️</div>
+        <div style="padding:1.1rem">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text);margin-bottom:.35rem">Documentación legal</div>
+          <p style="font-size:.78rem;color:var(--soft);line-height:1.6;margin-bottom:.85rem">Redactamos contratos, términos de servicio, políticas de privacidad y avisos legales adaptados a tu negocio. Listos para revisar con tu abogado y firmar.</p>
+          <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.85rem">
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Contratos</span>
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">GDPR</span>
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Términos y condiciones</span>
+          </div>
+          <a href="#contacto" style="display:flex;align-items:center;justify-content:space-between;background:var(--s3);border-radius:8px;padding:.6rem .85rem;text-decoration:none;transition:background .2s" onmouseover="this.style.background='rgba(200,245,66,.08)'" onmouseout="this.style.background='var(--s3)'">
+            <span style="font-size:.78rem;color:var(--accent);font-weight:500">Solicitar este servicio</span>
+            <span style="color:var(--accent);font-size:.85rem">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Extensiones Chrome -->
+      <div style="background:var(--s2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s" onmouseover="this.style.transform='translateY(-3px)';this.style.borderColor='var(--border2)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
+        <div style="height:110px;background:linear-gradient(135deg,#4285f4,#0f9d58);display:flex;align-items:center;justify-content:center;font-size:2rem">🧩</div>
+        <div style="padding:1.1rem">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text);margin-bottom:.35rem">Extensiones Chrome a medida</div>
+          <p style="font-size:.78rem;color:var(--soft);line-height:1.6;margin-bottom:.85rem">Creamos extensiones de Chrome personalizadas con Manifest V3: bloqueo de distracciones, extracción de datos, automatizaciones web. Lista para instalar en minutos.</p>
+          <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.85rem">
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Chrome</span>
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Manifest V3</span>
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Automatización</span>
+          </div>
+          <a href="#contacto" style="display:flex;align-items:center;justify-content:space-between;background:var(--s3);border-radius:8px;padding:.6rem .85rem;text-decoration:none;transition:background .2s" onmouseover="this.style.background='rgba(200,245,66,.08)'" onmouseout="this.style.background='var(--s3)'">
+            <span style="font-size:.78rem;color:var(--accent);font-weight:500">Solicitar este servicio</span>
+            <span style="color:var(--accent);font-size:.85rem">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Instagram → Web -->
+      <div style="background:var(--s2);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s" onmouseover="this.style.transform='translateY(-3px)';this.style.borderColor='var(--border2)'" onmouseout="this.style.transform='';this.style.borderColor='var(--border)'">
+        <div style="height:110px;background:linear-gradient(135deg,#f59e0b,#ec4899,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:2rem;position:relative">
+          📸
+          <span style="position:absolute;top:.6rem;right:.6rem;background:rgba(0,0,0,.25);color:#fff;font-size:.62rem;font-weight:600;padding:.18rem .55rem;border-radius:100px">Popular</span>
+        </div>
+        <div style="padding:1.1rem">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text);margin-bottom:.35rem">Instagram → Web de marca personal</div>
+          <p style="font-size:.78rem;color:var(--soft);line-height:1.6;margin-bottom:.85rem">Convertimos tu perfil de Instagram en una web profesional. Claude descarga tus fotos, suma seguidores de todas tus redes y entrega una web premium lista para publicar.</p>
+          <div style="display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:.85rem">
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Instagram</span>
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Marca personal</span>
+            <span style="font-size:.62rem;padding:.14rem .48rem;border-radius:100px;border:1px solid var(--border);color:var(--muted)">Web completa</span>
+          </div>
+          <a href="#contacto" style="display:flex;align-items:center;justify-content:space-between;background:var(--s3);border-radius:8px;padding:.6rem .85rem;text-decoration:none;transition:background .2s" onmouseover="this.style.background='rgba(200,245,66,.08)'" onmouseout="this.style.background='var(--s3)'">
+            <span style="font-size:.78rem;color:var(--accent);font-weight:500">Solicitar este servicio</span>
+            <span style="color:var(--accent);font-size:.85rem">→</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Más próximamente -->
+      <div style="background:rgba(200,245,66,.03);border:1px dashed rgba(200,245,66,.15);border-radius:14px;padding:1.5rem;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.75rem;min-height:240px">
+        <div style="font-size:1.75rem">🔮</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;color:var(--text)">¿Tienes una necesidad concreta?</div>
+        <p style="font-size:.78rem;color:var(--soft);line-height:1.6;max-width:220px">Cuéntanos qué resultado necesitas. Si existe una skill que lo resuelva, la aplicamos. Si no, la creamos.</p>
+        <a href="#contacto" style="background:transparent;color:var(--accent);border:1px solid rgba(200,245,66,.25);border-radius:100px;padding:.5rem 1.25rem;font-size:.78rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;transition:all .2s" onmouseover="this.style.background='rgba(200,245,66,.08)'" onmouseout="this.style.background='transparent'">Hablar con SRBA →</a>
+      </div>
+
     </div>
   </div>
 </section>
+
+
 
 <section id="contacto" style="background:var(--s1)">
   <div class="section-inner" style="max-width:600px;text-align:center">
@@ -873,7 +941,7 @@ header{background:var(--ink);padding:.85rem 1.5rem;display:flex;align-items:cent
     <div>
       <div class="footer-col-title">Contacto</div>
       <ul class="footer-links">
-        <li><a href="mailto:hola@srba.ai">hola@srba.ai</a></li>
+        <li><a href="mailto:srba.agency@gmail.com">srba.agency@gmail.com</a></li>
         <li><a href="#">WhatsApp</a></li>
         <li><a href="#">LinkedIn</a></li>
         <li><a href="#">Instagram</a></li>
@@ -881,7 +949,7 @@ header{background:var(--ink);padding:.85rem 1.5rem;display:flex;align-items:cent
     </div>
   </div>
   <div class="footer-bottom">
-    <span class="footer-copy">© 2025 SRBA · Todos los derechos reservados.</span>
+    <span class="footer-copy">© 2025 SRBA · Todos los derechos reservados. · <a href="/legal.html" style="color:var(--muted);text-decoration:none" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">Aviso Legal</a> · <a href="/privacidad.html" style="color:var(--muted);text-decoration:none" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">Privacidad</a> · <a href="/cookies.html" style="color:var(--muted);text-decoration:none" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--muted)'">Cookies</a></span>
     <span class="footer-copy">Hecho con IA en España 🇪🇸</span>
   </div>
 </footer>
@@ -1271,5 +1339,22 @@ function revealObserver(){
   document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 }
 </script>
+
+<!-- BANNER COOKIES -->
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:var(--s1);border-top:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;box-shadow:0 -8px 32px rgba(0,0,0,.4)">
+  <div style="font-size:.82rem;color:var(--soft);line-height:1.55;flex:1;min-width:250px">
+    🍪 Usamos cookies propias para el funcionamiento de la web. No usamos cookies de terceros ni de publicidad. <a href="/cookies.html" style="color:var(--accent);text-decoration:none">Más información</a>
+  </div>
+  <div style="display:flex;gap:.75rem;flex-shrink:0">
+    <button onclick="rejectCookies()" style="background:transparent;border:1px solid var(--border2);color:var(--muted);border-radius:100px;padding:.5rem 1.1rem;font-size:.78rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s">Solo necesarias</button>
+    <button onclick="acceptCookies()" style="background:var(--accent);color:#1a1a18;border:none;border-radius:100px;padding:.5rem 1.25rem;font-size:.78rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .2s">Aceptar →</button>
+  </div>
+</div>
+<script>
+function acceptCookies(){localStorage.setItem('srba_cookies','accepted');document.getElementById('cookieBanner').style.display='none';}
+function rejectCookies(){localStorage.setItem('srba_cookies','rejected');document.getElementById('cookieBanner').style.display='none';}
+window.addEventListener('load',()=>{if(!localStorage.getItem('srba_cookies')){document.getElementById('cookieBanner').style.display='flex';}});
+</script>
+
 </body>
 </html>
